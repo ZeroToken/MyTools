@@ -1,3 +1,7 @@
 /MyTools/Library
 /MyTools/Temp
-/MyTools/ProjectSettings/ProjectVersion.txt
+*.csproj
+*.sln
+*.suo
+/MyTools/Assets/UnityVS
+/MyTools/Assets/UnityVS.meta
