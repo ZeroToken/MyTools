@@ -3,9 +3,16 @@ using System.Collections;
 
 public class Test : MonoBehaviour {
 
-    [UIComponent("Test")]
+    [UIAttribute("Test")]
     private GameObject test;
+    [UIAttribute("VVV")]
+    VVV vvv;
 
-    void Awake() { }
+    void Awake()
+    {
+        UIAttribute.Init(this);
+        Debug.Log(test.name);
+        Debug.Log(vvv.name);
+    }
 
 }
