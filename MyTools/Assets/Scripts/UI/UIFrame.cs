@@ -8,7 +8,25 @@ public class UIFrame : MonoBehaviour
     private Dictionary<string, Transform> allUI;
     void Awake()
     {
-        allUI = transform.AllChildrenIgnore<UIFrame>();
+        allUI = GetAllChildrenIgnore(transform);
+    }
+
+    public Dictionary<string, Transform> GetAllChildrenIgnore(Transform parent)
+    {
+        Dictionary<string, Transform> children = new Dictionary<string, Transform>();
+        foreach (Transform child in transform)
+        {
+            children.Add(child.name, child);
+            if (child.GetComponent<UIFrame>() == null)
+            {
+                var c = GetAllChildrenIgnore(child);
+                foreach (var v in c)
+                {
+                    children.Add(v.Key, v.Value);
+                }
+            }
+        }
+        return children;
     }
 
     public Transform GetTransform(string uiName)
