@@ -16,13 +16,16 @@ public class UIFrame : MonoBehaviour
         Dictionary<string, Transform> children = new Dictionary<string, Transform>();
         foreach (Transform child in parent)
         {
-            children.Add(child.name, child);
-            if (child.GetComponent<UIFrame>() == null)
+            if (!children.ContainsKey(child.name))
             {
-                var c = GetAllChildrenIgnore(child);
-                foreach (var v in c)
+                children.Add(child.name, child);
+                if (child.GetComponent<UIFrame>() == null)
                 {
-                    children.Add(v.Key, v.Value);
+                    var c = GetAllChildrenIgnore(child);
+                    foreach (var v in c)
+                    {
+                        children.Add(v.Key, v.Value);
+                    }
                 }
             }
         }
