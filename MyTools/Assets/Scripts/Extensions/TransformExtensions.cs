@@ -52,22 +52,24 @@ public static class TransformExtensions
     }
 
 
-    public static List<Transform> SetChildren(this Transform transform, int count, Transform childPrefab)
+    public static void SetChildCount<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild = null)
     {
         count = Mathf.Max(0, count);
         int childCount = transform.childCount;
         if (childCount == count)
-            return transform.FindAllChild() ;
+            return;
         if (childCount > count)
         {
-            for (int i = childCount - 1; i >= count; i--)
-                GameObject.DestroyImmediate(transform.GetChild(i).gameObject);
-            return transform.FindAllChild();
+            for (int i = 0; i < childCount; i++)
+            {
+                if (i < count)
+                    onRefreshChild(i, transform.GetChild(i).GetComponent<T>());
+                else
+                    GameObject.DestroyImmediate(transform.GetChild(i).gameObject);
+            }
         }
         else if(childPrefab != null)
         {
-            List<Transform> children = new List<Transform>();
-            childPrefab.gameObject.SetActive(true);
             for (int i = childCount; i < count; i++)
             {
                 Transform newChildTrans = Object.Instantiate(childPrefab) as Transform;
@@ -77,53 +79,38 @@ public static class TransformExtensions
                 newChildTrans.localRotation = childPrefab.localRotation;
                 newChildTrans.localScale = childPrefab.localScale;
                 newChildTrans.name += i;
-                children.Add(newChildTrans);
+                if (onRefreshChild != null) onRefreshChild(i, newChildTrans.GetComponent<T>());
             }
+        }
+    }
+    public static void SetChildren<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild)
+    {
+        if (childPrefab != null)
+        {
+            childPrefab.gameObject.SetActive(true);
+            transform.SetChildCount<T>(count, childPrefab, onRefreshChild);
             childPrefab.gameObject.SetActive(false);
-            return children;
         }
-        return new List<Transform>();
     }
 
-    public static void SetChild(this Transform transform, int count, Transform child)
+    public static void SetChildren(this Transform transform, int count, Transform childPrefab)
     {
-        if (transform != null && child != null)
-        {
-            child.gameObject.SetActive(true);
-            transform.SetChildren(count, child);
-            child.gameObject.SetActive(false);
-        }
+        transform.SetChildren<Transform>(count, childPrefab, null);
     }
 
-    public static List<Transform> SetChildGet(this Transform transform, int count, Transform child)
+    public static List<Transform> SetChildrenGet(this Transform transform, int count, Transform childPrefab)
     {
-        List<Transform> children = new List<Transform>();
-        if (transform != null && child != null)
-        {
-            transform.SetChild(count, child);
-            for (int i = 0; i < count; i++)
-            {
-                children.Add(transform.GetChild(i));
-            }
-        }
-        return children;
+        transform.SetChildren(count, childPrefab);
+        return transform.FindAllChild();
     }
 
-    public static List<Transform> SetChildGet(this Transform transform, int count, Transform child, System.Action<int, Transform> onRefreshChild)
+    public static List<Transform> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild)
     {
-        List<Transform> children = new List<Transform>();
-        if (transform != null && child != null)
-        {
-            transform.SetChild<Transform>(count, child, (idx, childTransform) =>
-            {
-                children.Add(transform.GetChild(idx));
-                if (onRefreshChild != null) onRefreshChild(idx, childTransform);
-            });
-        }
-        return children;
+        transform.SetChildren<T>(count, childPrefab, onRefreshChild);
+        return transform.FindAllChild();
     }
 
-    public static int GetActiveChildCount(this Transform transform)
+    public static int ChildrenActiveCount(this Transform transform)
     {
         int activeCount = 0;
         for (int i = 0; i < transform.childCount; i++)
@@ -132,32 +119,5 @@ public static class TransformExtensions
                 activeCount++;
         }
         return activeCount;
-    }
-
-    public static List<T> SetChild<T>(this Transform transform, int count, Transform child, System.Action<int, T> onRefreshChild) where T : Component
-    {
-        List<T> ts = new List<T>();
-        if (transform != null && child != null)
-        {
-            child.gameObject.SetActive(true);
-            transform.SetChildren(count, child);
-            child.gameObject.SetActive(false);
-            if (onRefreshChild != null)
-            {
-                T tchild = null;
-                for (int i = 0; i < count; i++)
-                {
-                    child = transform.GetChild(i);
-                    if (child != null)
-                    {
-                        tchild = child.GetComponent<T>();
-                        if (tchild != null) ts.Add(tchild);
-                    }
-                    onRefreshChild(i, tchild);
-                    tchild = null;
-                }
-            }
-        }
-        return ts;
     }
 }

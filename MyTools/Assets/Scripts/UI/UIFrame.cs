@@ -14,7 +14,7 @@ public class UIFrame : MonoBehaviour
     public Dictionary<string, Transform> GetAllChildrenIgnore(Transform parent)
     {
         Dictionary<string, Transform> children = new Dictionary<string, Transform>();
-        foreach (Transform child in transform)
+        foreach (Transform child in parent)
         {
             children.Add(child.name, child);
             if (child.GetComponent<UIFrame>() == null)
