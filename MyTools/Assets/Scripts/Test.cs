@@ -11,8 +11,8 @@ public class Test : MonoBehaviour {
     void Awake()
     {
         UIAttribute.Init(this);
-        Debug.Log(test.name);
-        Debug.Log(vvv.name);
+        //Debug.Log(test.name);
+        //Debug.Log(vvv.name);
     }
 
 }

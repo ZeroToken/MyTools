@@ -146,6 +146,8 @@ public class U2DGrid : MonoBehaviour
         {
             for (int i = 0; i < TransChildCount; i++)
                 Children.Add(transform.GetChild(i));
+            this.mTotalCount = TransChildCount;
+            Sorting();
             ResetChildrenPosition();
         }
         if (Panel != null) Panel.onClipMove = WrapContent;
@@ -182,6 +184,18 @@ public class U2DGrid : MonoBehaviour
         {
             SetChildren(totalCount, prefab);
         }
+        Sorting();
+        ResetChildrenPosition();
+    }
+
+    private void Sorting()
+    {
+        if (sorting == UIGrid.Sorting.Alphabetic)
+            mChildren.Sort(UIGrid.SortByName);
+        else if (sorting == UIGrid.Sorting.Horizontal)
+            mChildren.Sort(UIGrid.SortHorizontal);
+        else if (sorting == UIGrid.Sorting.Vertical)
+            mChildren.Sort(UIGrid.SortVertical);
     }
 
     public virtual void SetChildren(int count, Transform child)
@@ -190,13 +204,6 @@ public class U2DGrid : MonoBehaviour
         {
             mChildren = null;
             mChildren = transform.SetChildrenGet<Transform>(count, child, onRefreshChild);
-            if (sorting == UIGrid.Sorting.Alphabetic)
-                mChildren.Sort(UIGrid.SortByName);
-            else if (sorting == UIGrid.Sorting.Horizontal)
-                mChildren.Sort(UIGrid.SortHorizontal);
-            else if (sorting == UIGrid.Sorting.Vertical)
-                mChildren.Sort(UIGrid.SortVertical);
-            ResetChildrenPosition();
         }
     }
     [ContextMenu("ResetChildrenPosition")]
@@ -467,6 +474,7 @@ public class U2DGrid : MonoBehaviour
 
     public void DragLeft(int span = 1)
     {
+        span = span == 0 ? 1 : span;
         mDragIndex = CalcRealIndex(arrangement == Arrangement.Horizontal ? MinPosTransform : MaxPosTransform);
         if (mDragIndex >= 0)
         {
@@ -479,9 +487,10 @@ public class U2DGrid : MonoBehaviour
 
     public void DragRight(int span = 1)
     {
+        span = span == 0 ? 1 : span;
         mDragIndex = CalcRealIndex(arrangement == Arrangement.Horizontal ? MinPosTransform : MaxPosTransform);
         mDragIndex = mDragIndex < 0 ? 0 : mDragIndex;
-        if (mDragIndex < TotalCount - TransChildCount + 2)
+        if (mDragIndex < TotalCount - HorizonCount + 1)
         {
             if (mDragIndex + HorizonCount >= TotalCount)
                 span = 1;
