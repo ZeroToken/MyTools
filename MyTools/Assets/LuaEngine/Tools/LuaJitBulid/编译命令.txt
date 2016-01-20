@@ -1,0 +1,14 @@
+使用步骤：
+1、打开Cmd命令行
+2、cd 到当前目录下
+3、执行luajit -b 源文件（可包含路径） 编译后的文件（可包含路径、未带路径则编译到当前目录）
+
+
+例：luajit -b myLua.lua builded.lua
+
+?是源文件 例：/lua/origin.lua
+XX是编译后的文件 例：/Lua/jit.lua(与luajit.exe同级)
+
+	luajit -b %%l savePath
+
+	luajit -b %%l!s!
