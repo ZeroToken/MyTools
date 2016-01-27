@@ -45,9 +45,17 @@ public static class TransformExtensions
     /// <returns></returns>
     public static List<Transform> FindAllChild(this Transform transform)
     {
-        List<Transform> children = new List<Transform>();
+        return transform.FindChildren<Transform>();
+    }
+
+    public static List<T> FindChildren<T>(this Transform transform)
+    {
+        List<T> children = new List<T>();
         foreach (Transform child in transform)
-            children.Add(child);
+        {
+            var component = child.GetComponent<T>();
+            if (component != null) children.Add(component);
+        }
         return children;
     }
 
@@ -98,16 +106,16 @@ public static class TransformExtensions
         transform.SetChildren<Transform>(count, childPrefab, null);
     }
 
-    public static List<Transform> SetChildrenGet(this Transform transform, int count, Transform childPrefab)
+    public static List<T> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab)
     {
         transform.SetChildren(count, childPrefab);
-        return transform.FindAllChild();
+        return transform.FindChildren<T>();
     }
 
-    public static List<Transform> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild)
+    public static List<T> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild)
     {
         transform.SetChildren<T>(count, childPrefab, onRefreshChild);
-        return transform.FindAllChild();
+        return transform.FindChildren<T>();
     }
 
     public static int ChildrenActiveCount(this Transform transform)

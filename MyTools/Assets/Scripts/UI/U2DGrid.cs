@@ -12,6 +12,7 @@ public class U2DGrid : MonoBehaviour
     public UIWidget.Pivot pivot = UIWidget.Pivot.TopLeft;
     public bool isChildOnCenter;
     public int springStrength = 20;
+    public bool isOffsetCount;
 
     public enum Arrangement
     {
@@ -26,7 +27,7 @@ public class U2DGrid : MonoBehaviour
     {
         get
         {
-            if(mPanel == null)
+            if (mPanel == null)
                 mPanel = NGUITools.FindInParents<UIPanel>(gameObject);
             return mPanel;
         }
@@ -76,21 +77,23 @@ public class U2DGrid : MonoBehaviour
         }
     }
 
-    public int TransChildCount 
-    { 
-        get 
-        { 
+    public int TransChildCount
+    {
+        get
+        {
             return transform.childCount;
         }
     }
 
-    public int WidthCount 
-    { 
-        get 
+    public int WidthCount
+    {
+        get
         {
             int width = (int)Mathf.Abs(Corners[2].x - Corners[0].x);
-            return width / cellWidth + (width % cellWidth > 0 ? 1 : 0);
-        } 
+            if (isOffsetCount)
+                return width / cellWidth + (width % cellWidth > 0 ? 1 : 0);
+            return width / cellWidth;
+        }
     }
 
     public int HeightCount
@@ -98,7 +101,9 @@ public class U2DGrid : MonoBehaviour
         get
         {
             int height = (int)Mathf.Abs(Corners[2].y - Corners[0].y);
-            return height / cellHeight + (height % cellHeight > 0 ? 1 : 0);
+            if (isOffsetCount)
+                return height / cellHeight + (height % cellHeight > 0 ? 1 : 0);
+            return height / cellHeight;
         }
     }
 
@@ -127,6 +132,8 @@ public class U2DGrid : MonoBehaviour
         }
     }
 
+    public System.Action<int, Transform> onHorizonRefresh;
+
     private int mTotalCount;
     public int TotalCount
     {
@@ -139,6 +146,14 @@ public class U2DGrid : MonoBehaviour
     private Transform childPrefab;
 
     private int mDragIndex;
+
+    public int DragIndex
+    {
+        get
+        {
+            return mDragIndex;
+        }
+    }
 
     void Awake()
     {
@@ -175,7 +190,7 @@ public class U2DGrid : MonoBehaviour
             int widthCount = WidthCount;
             SetChildren(totalCount > widthCount + 1 ? widthCount + 1 : totalCount, prefab);
         }
-        else if(arrangement == Arrangement.Vertical)
+        else if (arrangement == Arrangement.Vertical)
         {
             int heightCount = HeightCount;
             SetChildren(totalCount > heightCount + 1 ? heightCount + 1 : totalCount, prefab);
@@ -203,7 +218,7 @@ public class U2DGrid : MonoBehaviour
         if (child != null)
         {
             mChildren = null;
-            mChildren = transform.SetChildrenGet<Transform>(count, child, onRefreshChild);
+            mChildren = transform.SetChildrenGet(count, child, onRefreshChild);
         }
     }
     [ContextMenu("ResetChildrenPosition")]
@@ -279,7 +294,7 @@ public class U2DGrid : MonoBehaviour
         float extents = cellWidth * Children.Count * 0.5f;
         Vector3 center = Vector3.Lerp(Corners[0], Corners[2], 0.5f);
         float ext2 = extents * 2f;
-        if(mChildren.Count > 0)
+        if (mChildren.Count > 0)
         {
             for (int i = 0, imax = mChildren.Count; i < imax; ++i)
             {
@@ -308,8 +323,14 @@ public class U2DGrid : MonoBehaviour
                         UpdateChild(t, i);
                     }
                 }
+
+                if (t.localPosition.x < Corners[2].x && t.localPosition.x > Corners[0].x)
+                {
+                    if (onHorizonRefresh != null) onHorizonRefresh(CalcRealIndex(t), t);
+                }
+
             }
-        } 
+        }
     }
 
     private void WrapVertical()
@@ -364,7 +385,7 @@ public class U2DGrid : MonoBehaviour
                     distance = child.localPosition.x - center.x;
                     distance += mPanel.clipOffset.x - transform.localPosition.x;
                 }
-                else if(arrangement == Arrangement.MatrixVertical)
+                else if (arrangement == Arrangement.MatrixVertical)
                 {
                     min = Corners[0].y - cellHeight;
                     max = Corners[2].y + cellHeight;
@@ -414,7 +435,12 @@ public class U2DGrid : MonoBehaviour
             }
             MoveTo(focusPos, springStrength);
         }
+    }
 
+    public void FocusOnIndex(int index)
+    {
+        index = index + HorizonCount >= TotalCount ? TotalCount - HorizonCount : index;
+        FocusOn(index);
     }
 
     public void MoveTo(Vector3 target, float stength)
@@ -433,7 +459,7 @@ public class U2DGrid : MonoBehaviour
     {
         get
         {
-            return mChildren.Find((x) => 
+            return mChildren.Find((x) =>
             {
                 if (arrangement == Arrangement.Horizontal)
                 {
@@ -480,6 +506,8 @@ public class U2DGrid : MonoBehaviour
         {
             if (mDragIndex - span <= -span)
                 span = 1;
+            else if (mDragIndex - span < 0)
+                span = mDragIndex;
             mDragIndex -= span;
         }
         FocusOn(mDragIndex);
@@ -494,6 +522,12 @@ public class U2DGrid : MonoBehaviour
         {
             if (mDragIndex + HorizonCount >= TotalCount)
                 span = 1;
+            else
+            {
+                int offset = Mathf.Abs(TotalCount - (mDragIndex + span));
+                if (offset < HorizonCount)
+                    span = offset;
+            }
             mDragIndex += span;
         }
         FocusOn(mDragIndex);
