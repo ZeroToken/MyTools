@@ -39,6 +39,7 @@ public class UIToggleSlider : MonoBehaviour
                 if (child != null)
                     child.startsActive = idx == 0;
             });
+            uiToggleGrid.repositionNow = true;
         }
         if (uiViewGrid != null)
         {
