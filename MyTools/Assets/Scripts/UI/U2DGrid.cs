@@ -13,6 +13,8 @@ public class U2DGrid : MonoBehaviour
     public bool isChildOnCenter;
     public int springStrength = 20;
     public bool isOffsetCount;
+    public bool isLoop;
+    public bool isInvalidateBounds;
 
     public enum Arrangement
     {
@@ -172,6 +174,7 @@ public class U2DGrid : MonoBehaviour
             {
                 uiCenterOnChild = gameObject.AddComponent<UICenterOnChild>();
                 uiCenterOnChild.enabled = pivot != UIWidget.Pivot.Center;
+                if (isInvalidateBounds) uiCenterOnChild.onFinished = InvalidateBounds;
             }
         }
         else if (UICenterOnChild != null)
@@ -306,7 +309,7 @@ public class U2DGrid : MonoBehaviour
                     Vector3 pos = t.localPosition;
                     pos.x += ext2;
                     int realIndex = Mathf.RoundToInt(pos.x / cellWidth);
-                    if (0 <= realIndex && realIndex <= mTotalCount - 1)
+                    if ((0 <= realIndex && realIndex <= mTotalCount - 1) || isLoop)
                     {
                         t.localPosition = pos;
                         UpdateChild(t, i);
@@ -317,7 +320,7 @@ public class U2DGrid : MonoBehaviour
                     Vector3 pos = t.localPosition;
                     pos.x -= ext2;
                     int realIndex = Mathf.RoundToInt(pos.x / cellWidth);
-                    if (0 <= realIndex && realIndex <= mTotalCount - 1)
+                    if ((0 <= realIndex && realIndex <= mTotalCount - 1) || isLoop)
                     {
                         t.localPosition = pos;
                         UpdateChild(t, i);
@@ -349,7 +352,7 @@ public class U2DGrid : MonoBehaviour
                 pos.y += ext2;
                 int realIndex = -Mathf.RoundToInt(pos.y / cellHeight);
                 //Debug.Log(realIndex);
-                if (0 <= realIndex && realIndex <= mTotalCount - 1)
+                if (0 <= realIndex && realIndex <= mTotalCount - 1 || isLoop)
                 {
                     t.localPosition = pos;
                     UpdateChild(t, i);
@@ -360,11 +363,15 @@ public class U2DGrid : MonoBehaviour
                 Vector3 pos = t.localPosition;
                 pos.y -= ext2;
                 int realIndex = -Mathf.RoundToInt(pos.y / cellHeight);
-                if (0 <= realIndex && realIndex <= mTotalCount - 1)
+                if (0 <= realIndex && realIndex <= mTotalCount - 1 || isLoop)
                 {
                     t.localPosition = pos;
                     UpdateChild(t, i);
                 }
+            }
+            if (t.localPosition.x > Corners[2].y && t.localPosition.x < Corners[0].y)
+            {
+                if (onHorizonRefresh != null) onHorizonRefresh(CalcRealIndex(t), t);
             }
         }
     }
@@ -411,9 +418,12 @@ public class U2DGrid : MonoBehaviour
     {
         if (trans != null)
         {
-            return (arrangement == Arrangement.Vertical) ?
-               Mathf.Abs(Mathf.RoundToInt(trans.localPosition.y / cellHeight)) :
-               Mathf.Abs(Mathf.RoundToInt(trans.localPosition.x / cellWidth));
+            int tempIndex = (arrangement == Arrangement.Vertical) ?
+               Mathf.RoundToInt(trans.localPosition.y / cellHeight) :
+               Mathf.RoundToInt(trans.localPosition.x / cellWidth);
+            tempIndex = tempIndex % TotalCount;
+            tempIndex = tempIndex < 0 ? tempIndex + TotalCount : tempIndex;
+            return tempIndex;
         }
         return -1;
     }
@@ -437,6 +447,19 @@ public class U2DGrid : MonoBehaviour
         }
     }
 
+    public void Forward()
+    {
+        if (arrangement == Arrangement.Horizontal)
+        {
+            MoveTo(ScrollView.transform.localPosition - new Vector3(cellWidth, 0, 0), springStrength);
+        }
+        else if (arrangement == Arrangement.Vertical)
+        {
+            MoveTo(ScrollView.transform.localPosition + new Vector3(0, cellHeight, 0), springStrength);
+        }
+
+    }
+
     public void FocusOnIndex(int index)
     {
         index = index + HorizonCount >= TotalCount ? TotalCount - HorizonCount : index;
@@ -449,10 +472,15 @@ public class U2DGrid : MonoBehaviour
         ScrollView.InvalidateBounds();
         springPanel.onFinished = () =>
         {
-            ScrollView.InvalidateBounds();
-            ScrollView.restrictWithinPanel = true;
-            ScrollView.RestrictWithinBounds(false, ScrollView.canMoveHorizontally, ScrollView.canMoveVertically);
+            InvalidateBounds();
         };
+    }
+
+    public void InvalidateBounds()
+    {
+        ScrollView.InvalidateBounds();
+        ScrollView.restrictWithinPanel = true;
+        ScrollView.RestrictWithinBounds(false, ScrollView.canMoveHorizontally, ScrollView.canMoveVertically);
     }
 
     public Transform MinPosTransform
