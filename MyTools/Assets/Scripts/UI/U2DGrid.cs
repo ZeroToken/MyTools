@@ -418,11 +418,25 @@ public class U2DGrid : MonoBehaviour
     {
         if (trans != null)
         {
-            int tempIndex = (arrangement == Arrangement.Vertical) ?
-               Mathf.RoundToInt(trans.localPosition.y / cellHeight) :
-               Mathf.RoundToInt(trans.localPosition.x / cellWidth);
-            tempIndex = tempIndex % TotalCount;
-            tempIndex = tempIndex < 0 ? tempIndex + TotalCount : tempIndex;
+            int tempIndex = 0;
+            if (arrangement == Arrangement.Vertical)
+            {
+                tempIndex = Mathf.RoundToInt(trans.localPosition.y / cellHeight);
+                tempIndex = tempIndex % TotalCount;
+                tempIndex = tempIndex < 0 ? Mathf.Abs(tempIndex) : (tempIndex > 0 ? TotalCount - tempIndex : tempIndex);
+            }
+            else if (arrangement == Arrangement.Horizontal)
+            {
+                tempIndex = Mathf.RoundToInt(trans.localPosition.x / cellWidth);
+                tempIndex = tempIndex % TotalCount;
+                tempIndex = tempIndex < 0 ? tempIndex + TotalCount : tempIndex;
+            }
+            //int tempIndex = (arrangement == Arrangement.Vertical) ?
+            //   Mathf.RoundToInt(trans.localPosition.y / cellHeight) :
+            //   Mathf.RoundToInt(trans.localPosition.x / cellWidth);
+            //Debug.Log(tempIndex);
+            //tempIndex = tempIndex % TotalCount;
+            //tempIndex = tempIndex < 0 ? tempIndex + TotalCount : tempIndex;
             return tempIndex;
         }
         return -1;
