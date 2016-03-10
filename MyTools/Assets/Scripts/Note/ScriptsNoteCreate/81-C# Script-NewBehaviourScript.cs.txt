@@ -1,0 +1,24 @@
+﻿/***************************************************************************
+
+文件名（File Name）    :  #SCRIPTNAME#.cs
+
+作者（Author）         :  #AuthorName#
+
+创建时间（Create Time）:  #CreateTime#
+
+****************************************************************************/
+using UnityEngine;
+using System.Collections;
+
+public class #SCRIPTNAME# : MonoBehaviour {
+
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}
