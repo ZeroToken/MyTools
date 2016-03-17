@@ -99,8 +99,10 @@ namespace LuaEngine
             catch (System.Exception requireEx)
             {
                 Debug.LogWarning("Lua Warning: " + requireEx.Message);
-                this.DoResourceFile(luaScript + ".lua");
-                return new object[]{ luaState.GetTable(luaScript) };
+                object[] returns = this.DoResourceFile(luaScript + ".lua");
+                if (returns == null)
+                    returns = new object[]{ luaState.GetTable(luaScript) };
+                return returns;
             }
 
         }
