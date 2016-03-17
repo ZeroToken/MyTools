@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LuaInterface;
+using LuaEngine;
 
 /// <summary>
 /// 反射调用方式是不推荐使用的，因为效率慢，推荐的是使用wrap的去反射模式，

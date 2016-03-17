@@ -1,4 +1,4 @@
-﻿namespace LuaInterface
+﻿namespace LuaEngine
 {
     using System;
     using System.IO;

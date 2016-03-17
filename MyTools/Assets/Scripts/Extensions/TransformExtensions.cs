@@ -48,7 +48,7 @@ public static class TransformExtensions
         return transform.FindChildren<Transform>();
     }
 
-    public static List<T> FindChildren<T>(this Transform transform)
+    public static List<T> FindChildren<T>(this Transform transform) where T:Component
     {
         List<T> children = new List<T>();
         foreach (Transform child in transform)
@@ -60,7 +60,7 @@ public static class TransformExtensions
     }
 
 
-    public static void SetChildCount<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild = null)
+    public static void SetChildCount<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild = null) where T : Component
     {
         count = Mathf.Max(0, count);
         int childCount = transform.childCount;
@@ -91,7 +91,7 @@ public static class TransformExtensions
             }
         }
     }
-    public static void SetChildren<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild)
+    public static void SetChildren<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild) where T : Component
     {
         if (childPrefab != null)
         {
@@ -106,13 +106,13 @@ public static class TransformExtensions
         transform.SetChildren<Transform>(count, childPrefab, null);
     }
 
-    public static List<T> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab)
+    public static List<T> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab) where T : Component
     {
         transform.SetChildren(count, childPrefab);
         return transform.FindChildren<T>();
     }
 
-    public static List<T> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild)
+    public static List<T> SetChildrenGet<T>(this Transform transform, int count, Transform childPrefab, System.Action<int, T> onRefreshChild) where T : Component
     {
         transform.SetChildren<T>(count, childPrefab, onRefreshChild);
         return transform.FindChildren<T>();

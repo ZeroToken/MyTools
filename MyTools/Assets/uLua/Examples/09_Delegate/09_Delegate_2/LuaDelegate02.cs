@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using LuaInterface;
+using LuaEngine;
 
 public class LuaDelegate02 : MonoBehaviour
 {

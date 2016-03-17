@@ -1,6 +1,6 @@
 using System;
 
-namespace LuaInterface
+namespace LuaEngine
 {
     /// <summary>
     /// Marks a method, field or property to be hidden from Lua auto-completion

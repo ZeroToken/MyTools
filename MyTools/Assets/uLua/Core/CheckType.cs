@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace LuaInterface
+namespace LuaEngine
 {
     /*
      * Type checking and conversion functions.

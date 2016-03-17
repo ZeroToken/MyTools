@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using LuaInterface;
+using LuaEngine;
 
 public class LuaArray : MonoBehaviour {
 

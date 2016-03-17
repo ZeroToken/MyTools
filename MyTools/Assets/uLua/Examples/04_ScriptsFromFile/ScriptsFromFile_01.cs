@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LuaInterface;
+using LuaEngine;
 
 public class ScriptsFromFile_01 : MonoBehaviour
 {

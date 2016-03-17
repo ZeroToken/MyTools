@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace LuaInterface
+namespace LuaEngine
 {
     public static class LuaRegistrationHelper
     {

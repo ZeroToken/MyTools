@@ -10,7 +10,7 @@ using System.Collections;
 using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
-using LuaInterface;
+using LuaEngine;
 
 using Object = UnityEngine.Object;
 using System.IO;

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace LuaInterface
+namespace LuaEngine
 {
     /// <summary>
     /// Exceptions thrown by the Lua runtime

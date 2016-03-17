@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LuaInterface;
+using LuaEngine;
 using System;
 
 public class CallLuaFunction_02 : MonoBehaviour {

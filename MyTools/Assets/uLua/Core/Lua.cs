@@ -2,7 +2,7 @@
 #define __NOGEN__
 //#endif
 
-namespace LuaInterface
+namespace LuaEngine
 {
     using System;
     using System.IO;

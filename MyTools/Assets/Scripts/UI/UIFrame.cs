@@ -55,7 +55,7 @@ public class UIFrame : MonoBehaviour
         return null;
     }
 
-    public T Get<T>(string uiName) where T : UnityEngine.Object
+    public T Get<T>(string uiName) where T : Component
     {
         var ui = GetTransform(uiName);
         if(ui != null) return ui.GetComponent<T>();
