@@ -25,7 +25,9 @@ namespace LuaEngine
             mLuastate = new LuaState();
             foreach (var script in LuaConfig.DefaultScripts)
                 this.DoResourceFile(script);
+            this.AddGlobalFunction("AddSearchPath", luaState.GetFunction("AddSearchPath"));
             this.AddSearchPath(LuaConfig.ScriptAssetsPath);
+
         }
 
         public LuaState mLuastate;
@@ -94,14 +96,15 @@ namespace LuaEngine
             try
             {
                 luaScript = Path.GetFileNameWithoutExtension(luaScript);
-                return luaState.DoString(string.Format("return require '{0}'", luaScript));
+                return this.luaState.DoString(string.Format("return require '{0}'", luaScript));
             }
             catch (System.Exception requireEx)
             {
                 Debug.LogWarning("Lua Warning: " + requireEx.Message);
+                luaScript = Path.GetFileNameWithoutExtension(luaScript);
                 object[] returns = this.DoResourceFile(luaScript + ".lua");
                 if (returns == null)
-                    returns = new object[]{ luaState.GetTable(luaScript) };
+                    returns = new object[] { luaState.GetTable(luaScript) };
                 return returns;
             }
 
