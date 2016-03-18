@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Reflection;
-using LuaEngine;
+using LuaInterface;
 
 
 public class Client : MonoBehaviour 

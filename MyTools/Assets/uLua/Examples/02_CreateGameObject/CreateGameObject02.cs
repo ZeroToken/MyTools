@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LuaEngine;
+using LuaInterface;
 
 public class CreateGameObject02 : MonoBehaviour {
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using LuaEngine;
+using LuaInterface;
 using System.Runtime.InteropServices;
 
 

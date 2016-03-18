@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LuaEngine
+namespace LuaInterface
 {
     public class LuaFunction : LuaBase
     {        

@@ -1,6 +1,6 @@
 using System;
 
-namespace LuaEngine
+namespace LuaInterface
 {
     /// <summary>
     /// Marks a method for global usage in Lua scripts

@@ -1,7 +1,7 @@
 ﻿//#define MULTI_STATE
 using System;
 using System.Collections.Generic;
-using LuaEngine;
+using LuaInterface;
 using UnityEngine;
 using System.IO;
 using System.Runtime.InteropServices;

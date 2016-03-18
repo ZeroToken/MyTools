@@ -1,11 +1,11 @@
-﻿using LuaEngine;
+﻿using LuaInterface;
 using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
 
 
 
-namespace LuaEngine
+namespace LuaInterface
 {
     public class LuaManager
     {
@@ -20,9 +20,11 @@ namespace LuaEngine
             }
         }
 
+        private LuaScriptMgr mScriptMgr;
+
         public LuaManager()
         {
-            mLuastate = new LuaState();
+            mScriptMgr = new LuaScriptMgr();
             foreach (var script in LuaConfig.DefaultScripts)
                 this.DoResourceFile(script);
             this.AddGlobalFunction("AddSearchPath", luaState.GetFunction("AddSearchPath"));
@@ -36,7 +38,7 @@ namespace LuaEngine
             get
             {
                 if (mLuastate == null)
-                    mLuastate = new LuaState();
+                    mLuastate = mScriptMgr.lua;
                 return mLuastate;
             }
         }
@@ -100,7 +102,6 @@ namespace LuaEngine
             }
             catch (System.Exception requireEx)
             {
-                Debug.LogWarning("Lua Warning: " + requireEx.Message);
                 luaScript = Path.GetFileNameWithoutExtension(luaScript);
                 object[] returns = this.DoResourceFile(luaScript + ".lua");
                 if (returns == null)

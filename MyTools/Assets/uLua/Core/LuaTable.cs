@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
-namespace LuaEngine
+namespace LuaInterface
 {
     /*
      * Wrapper class for Lua tables

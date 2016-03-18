@@ -1,5 +1,5 @@
 ﻿using System;
-using LuaEngine;
+using LuaInterface;
 
 public class TestOverride_SpaceWrap
 {

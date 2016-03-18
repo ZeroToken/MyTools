@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LuaEngine;
+using LuaInterface;
 
 /// <summary>
 /// 使用操作步骤请参考文档：http://bbs.ulua.org/
