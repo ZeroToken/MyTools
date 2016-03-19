@@ -81,21 +81,22 @@ namespace LuaInterface
             //loaderFunction = new LuaCSFunction(LuaStatic.loader);
             //LuaDLL.lua_pushstdcallcfunction(L, loaderFunction);
             //int loaderFunc = LuaDLL.lua_gettop(L);
+
+
+            //LuaDLL.lua_getfield(L, LuaIndexes.LUA_GLOBALSINDEX, "package");
+            //LuaDLL.lua_getfield(L, -1, "loaders");
+            //int loaderTable = LuaDLL.lua_gettop(L);
+
+
+            //// Shift table elements right
+            //for (int e = LuaDLL.luaL_getn(L, loaderTable) + 1; e > 1; e--)
+            //{
+            //    LuaDLL.lua_rawgeti(L, loaderTable, e - 1);
+            //    LuaDLL.lua_rawseti(L, loaderTable, e);
+            //}
             //LuaDLL.lua_pushvalue(L, loaderFunc);
-
-            LuaDLL.lua_getfield(L, LuaIndexes.LUA_GLOBALSINDEX, "package");
-            LuaDLL.lua_getfield(L, -1, "loaders");
-            int loaderTable = LuaDLL.lua_gettop(L);
-
-
-            // Shift table elements right
-            for (int e = LuaDLL.luaL_getn(L, loaderTable) + 1; e > 1; e--)
-            {
-                LuaDLL.lua_rawgeti(L, loaderTable, e - 1);
-                LuaDLL.lua_rawseti(L, loaderTable, e);
-            }
-            LuaDLL.lua_rawseti(L, loaderTable, 1);
-            LuaDLL.lua_settop(L, 0);
+            //LuaDLL.lua_rawseti(L, loaderTable, 1);
+            //LuaDLL.lua_settop(L, 0);
 
             DoString(LuaStatic.init_luanet);
             tracebackFunction = new LuaCSFunction(LuaStatic.traceback);

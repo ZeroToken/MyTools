@@ -29,7 +29,7 @@ namespace LuaInterface
                 this.DoResourceFile(script);
             this.AddGlobalFunction("AddSearchPath", luaState.GetFunction("AddSearchPath"));
             this.AddSearchPath(LuaConfig.ScriptAssetsPath);
-
+            mScriptMgr.Start();
         }
 
         public LuaState mLuastate;
