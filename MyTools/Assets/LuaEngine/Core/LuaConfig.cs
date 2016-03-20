@@ -26,7 +26,6 @@ namespace LuaInterface
                 if (mDefaultScripts == null)
                 {
                     mDefaultScripts = new List<string>();
-                    mDefaultScripts.Add("Functions.lua");
                 }
                 return mDefaultScripts;
             }

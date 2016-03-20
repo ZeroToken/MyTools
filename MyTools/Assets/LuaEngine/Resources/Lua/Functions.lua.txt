@@ -1,4 +1,0 @@
-function AddSearchPath(path)
-    package.path = package.path..path..";";
-end
-

@@ -126,10 +126,13 @@ namespace LuaInterface
 
         public bool DoAddSearchPath(string path)
         {
-            //Debug.Log("add search path: " + path);
             LuaFunction addSearchPathFunc = this.GetGlobalFunction("AddSearchPath");
             if (addSearchPathFunc == null)
             {
+                this.luaState.DoString(@"
+                        function AddSearchPath(path)
+                            package.path = package.path..path..'; ';
+                        end");
                 addSearchPathFunc = this.luaState.GetFunction("AddSearchPath");
                 if(addSearchPathFunc != null)
                     this.AddGlobalFunction("AddSearchPath", addSearchPathFunc);
