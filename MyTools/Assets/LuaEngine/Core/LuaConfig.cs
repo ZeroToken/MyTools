@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -31,6 +31,27 @@ namespace LuaInterface
                 return mDefaultScripts;
             }
         }
+        /// <summary>
+        /// Lua库源文件路径
+        /// </summary>
+        public static string LUA_LIBRARY_SOURCE_PATH
+        {
+            get
+            {
+                return Application.dataPath + "/uLua/Lua";
+            }
+        }
+        /// <summary>
+        /// Lua库打包路径
+        /// </summary>
+        public static string LUA_LIBRARY_PACK_PATH
+        {
+            get
+            {
+                return Application.dataPath + "/LuaEngine/Resources/Lua/Lib";
+            }
+        }
+
     }
 }
 
