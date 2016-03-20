@@ -102,7 +102,7 @@ namespace LuaInterface
             }
             catch (System.Exception requireEx)
             {
-                Debug.Log(requireEx.Message);
+                Debug.LogError(requireEx.Message);
                 return null;
             }
 
@@ -115,10 +115,10 @@ namespace LuaInterface
         {
             if (Directory.Exists(rootPath))
             {
+                this.DoAddSearchPath(rootPath + "/?.lua");
                 string[] paths = Directory.GetDirectories(rootPath);
                 foreach (var path in paths)
                     this.DoAddSearchPath(path.Replace("\\", "/") + "/?.lua");
-                this.DoAddSearchPath(rootPath + "/?.lua");
             }
             else
                 Debug.LogError("Lua error: Does not exist " + rootPath);

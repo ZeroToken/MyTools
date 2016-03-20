@@ -96,7 +96,7 @@ namespace LuaInterface
             //}
 
             LuaDLL.lua_pushvalue(L, loaderFunc);
-            LuaDLL.lua_rawseti(L, loaderTable, 3);
+            LuaDLL.lua_rawseti(L, loaderTable, 4);
             LuaDLL.lua_settop(L, 0);
 
             DoString(LuaStatic.init_luanet);

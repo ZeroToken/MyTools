@@ -2,4 +2,6 @@ module("RequireTest", package.seeall)
 aa = 1
 function vvv( ... )
     print(GameObject)
+	local testImport = TestImport()
+	Debug.Log(testImport.value)
 end
