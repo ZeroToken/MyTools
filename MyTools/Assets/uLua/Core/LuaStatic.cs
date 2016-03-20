@@ -34,7 +34,7 @@ namespace LuaInterface
         static byte[] DefaultLoader(string path)
         {
             byte[] str = null;
-            
+
             if (File.Exists(path))
             {
                 str = File.ReadAllBytes(path);
@@ -43,7 +43,24 @@ namespace LuaInterface
             return str;
         }
 
-		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static string LoadScriptText(string file)
+        {
+            if (file.EndsWith(".lua"))
+                file = file.Remove(file.IndexOf(".lua"));
+            file = "Lua/" + file.Replace(".", "/") + ".lua";
+            TextAsset textAsset = Resources.Load(file, typeof(TextAsset)) as TextAsset;
+            if (textAsset != null)
+                return textAsset.text;
+            Debug.LogWarning(string.Format("Lua Warning: {0} not loaded", file));
+            return string.Empty;
+        }
+
+        public static byte[] LoadScriptBytes(string file)
+        {
+            return System.Text.Encoding.UTF8.GetBytes(LoadScriptText(file));
+        }
+
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		public static int panic(IntPtr L)
 		{
 			string reason = String.Format("unprotected error in call to Lua API ({0})", LuaDLL.lua_tostring(L, -1));
@@ -103,7 +120,7 @@ namespace LuaInterface
 		
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		public static int loader(IntPtr L)
-		{            
+		{
 			// Get script to load
 			string fileName = string.Empty;
 			fileName = LuaDLL.lua_tostring(L, 1);
@@ -132,7 +149,7 @@ namespace LuaInterface
             LuaDLL.lua_pushstdcallcfunction(L, mgr.lua.tracebackFunction);
             int oldTop = LuaDLL.lua_gettop(L);
 
-            byte[] text = LuaStatic.Load(fileName);
+            byte[] text = LuaStatic.LoadScriptBytes(fileName);
             if (text == null) {
                 if (!fileName.Contains("mobdebug")) {
                     Debugger.LogError("Loader lua file failed: {0}", fileName);

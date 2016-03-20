@@ -26,7 +26,7 @@ namespace LuaInterface
         {
             mScriptMgr = new LuaScriptMgr();
             foreach (var script in LuaConfig.DefaultScripts)
-                this.DoResourceFile(script);
+                this.luaState.DoString(LuaStatic.LoadScriptText(script));
             this.AddGlobalFunction("AddSearchPath", luaState.GetFunction("AddSearchPath"));
             this.AddSearchPath(LuaConfig.ScriptAssetsPath);
             mScriptMgr.Start();
@@ -102,11 +102,8 @@ namespace LuaInterface
             }
             catch (System.Exception requireEx)
             {
-                luaScript = Path.GetFileNameWithoutExtension(luaScript);
-                object[] returns = this.DoResourceFile(luaScript + ".lua");
-                if (returns == null)
-                    returns = new object[] { luaState.GetTable(luaScript) };
-                return returns;
+                Debug.Log(requireEx.Message);
+                return null;
             }
 
         }
@@ -143,26 +140,6 @@ namespace LuaInterface
                 return true;
             }
             return false;
-        }
-
-        public string LoadScript(string fileName)
-        {
-            TextAsset textAsset = Resources.Load("Lua/" + fileName, typeof(TextAsset)) as TextAsset;
-            if (textAsset != null)
-            {
-                return textAsset.text;
-            }
-                
-            else
-            {
-                Debug.LogWarning(string.Format("Lua Warning: {0} not loaded", fileName));
-                return string.Empty;
-            }        
-        }
-
-        public object[] DoResourceFile(string fileName)
-        {
-            return luaState.DoString(LoadScript(fileName));
         }
     }
 

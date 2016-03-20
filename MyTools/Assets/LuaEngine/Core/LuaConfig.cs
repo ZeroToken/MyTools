@@ -48,7 +48,7 @@ namespace LuaInterface
         {
             get
             {
-                return Application.dataPath + "/LuaEngine/Resources/Lua/Lib";
+                return Application.dataPath + "/LuaEngine/Resources/Lua";
             }
         }
 
