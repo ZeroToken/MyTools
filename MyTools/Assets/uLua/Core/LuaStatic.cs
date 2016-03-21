@@ -43,6 +43,11 @@ namespace LuaInterface
             return str;
         }
 
+        public static TextAsset LoadScript(string file)
+        {
+            return Resources.Load(file, typeof(TextAsset)) as TextAsset;
+        }
+
         public static string LoadScriptText(string file)
         {
             if (file.EndsWith(".lua"))

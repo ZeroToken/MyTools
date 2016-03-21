@@ -1,4 +1,4 @@
-print("=================Global.lua===================")
+﻿print("=================Global.lua===================")
 require "System.Wrap"
 luanet.load_assembly("UnityEngine")
 
@@ -41,7 +41,7 @@ PlayMode		= UnityEngine.PlayMode
 ParticleAnimator= UnityEngine.ParticleAnimator
 TouchPhase 		= UnityEngine.TouchPhase
 AnimationBlendMode = UnityEngine.AnimationBlendMode
-TestImport      = TestImport
+print(TestImport)
 
 function print(...)	
 	local arg = {...}	

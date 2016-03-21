@@ -63,6 +63,7 @@ public static class LuaBinder
 			case "System_ObjectWrap": System_ObjectWrap.Register(L); break;
 			case "TestDelegateListenerWrap": TestDelegateListenerWrap.Register(L); break;
 			case "TestEventListenerWrap": TestEventListenerWrap.Register(L); break;
+			case "TestImportWrap": TestImportWrap.Register(L); break;
 			case "TestLuaDelegateWrap": TestLuaDelegateWrap.Register(L); break;
 			case "TextureWrap": TextureWrap.Register(L); break;
 			case "TimeWrap": TimeWrap.Register(L); break;

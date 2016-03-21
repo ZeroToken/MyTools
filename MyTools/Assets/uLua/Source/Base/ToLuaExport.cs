@@ -352,12 +352,22 @@ public static class ToLuaExport
 
     static void GenLuaFields()
     {
-        fields = type.GetFields(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Instance | binding);
-        props = type.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | binding);
+        PropertyInfo[] baseProperties = null;
+        FieldInfo[] baseFields = null;
+        fields = type.GetFields(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Instance | binding | BindingFlags.Static);
+        props = type.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | binding | BindingFlags.Static);
         propList.AddRange(type.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase));
 
+
+        if (type.BaseType != null)
+        {
+            baseProperties = type.BaseType.GetProperties(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Static | BindingFlags.Public);
+            baseFields = type.BaseType.GetFields(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Static | BindingFlags.Public);
+        }
         List<FieldInfo> fieldList = new List<FieldInfo>();
         fieldList.AddRange(fields);
+        if (baseFields != null)
+            fieldList.AddRange(baseFields);
 
         for (int i = fieldList.Count - 1; i >= 0; i--)
         {
@@ -371,7 +381,8 @@ public static class ToLuaExport
 
         List<PropertyInfo> piList = new List<PropertyInfo>();
         piList.AddRange(props);
-
+        if (baseProperties != null)
+            piList.AddRange(baseProperties);
         for (int i = piList.Count - 1; i >= 0; i--)
         {
             if (piList[i].Name == "Item" || IsObsolete(piList[i]))
@@ -388,11 +399,6 @@ public static class ToLuaExport
             {
                 propList.RemoveAt(i);
             }
-        }
-
-        if (fields.Length == 0 && props.Length == 0 && isStaticClass && baseClassName == null)
-        {
-            return;
         }
 
         sb.AppendLine("\t\tLuaField[] fields = new LuaField[]");
