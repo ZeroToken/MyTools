@@ -21,6 +21,10 @@ public class DelegateFactoryWrap
 			new LuaMethod("GetClassType", GetClassType),
 		};
 
+		LuaField[] fields = new LuaField[]
+		{
+		};
+
 		LuaScriptMgr.RegisterLib(L, "DelegateFactory", regs);
 	}
 

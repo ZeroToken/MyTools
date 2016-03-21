@@ -14,6 +14,10 @@ public class DebuggerWrap
 			new LuaMethod("GetClassType", GetClassType),
 		};
 
+		LuaField[] fields = new LuaField[]
+		{
+		};
+
 		LuaScriptMgr.RegisterLib(L, "Debugger", regs);
 	}
 

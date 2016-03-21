@@ -42,6 +42,8 @@ public class RenderTextureWrap
 			new LuaField("colorBuffer", get_colorBuffer, null),
 			new LuaField("depthBuffer", get_depthBuffer, null),
 			new LuaField("active", get_active, set_active),
+			new LuaField("masterTextureLimit", get_masterTextureLimit, set_masterTextureLimit),
+			new LuaField("anisotropicFiltering", get_anisotropicFiltering, set_anisotropicFiltering),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.RenderTexture", typeof(RenderTexture), regs, fields, typeof(Texture));
@@ -467,6 +469,20 @@ public class RenderTextureWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_masterTextureLimit(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, RenderTexture.masterTextureLimit);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_anisotropicFiltering(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, RenderTexture.anisotropicFiltering);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_width(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -758,6 +774,20 @@ public class RenderTextureWrap
 	static int set_active(IntPtr L)
 	{
 		RenderTexture.active = (RenderTexture)LuaScriptMgr.GetUnityObject(L, 3, typeof(RenderTexture));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_masterTextureLimit(IntPtr L)
+	{
+		RenderTexture.masterTextureLimit = (int)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_anisotropicFiltering(IntPtr L)
+	{
+		RenderTexture.anisotropicFiltering = (AnisotropicFiltering)LuaScriptMgr.GetNetObject(L, 3, typeof(AnisotropicFiltering));
 		return 0;
 	}
 
