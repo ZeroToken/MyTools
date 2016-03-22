@@ -127,7 +127,7 @@ public static class ToLuaExport
 
     public static bool IsMemberFilter(MemberInfo mi)
     {
-        return memberFilter.Contains(type.Name + "." + mi.Name);
+        return memberFilter.Contains(type.Name + "." + mi.Name) || (type != null && memberFilter.Contains(type.BaseType.Name + "." + mi.Name));
     }
 
     static ToLuaExport()
