@@ -449,7 +449,7 @@ public class LuaScriptMgr
         traceback = GetLuaFunction("traceback");
 #endif                       
 
-        DoFile("System.Main");
+        DoString("require 'System.Main'");
         
         updateFunc = GetLuaFunction("Update");
         lateUpdateFunc = GetLuaFunction("LateUpdate");

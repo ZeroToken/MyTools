@@ -193,7 +193,7 @@ public static class LuaBinding
         sb.AppendLine("\t\tif (type == null || wrapList.Contains(type)) return;");
         sb.AppendLine("\t\twrapList.Add(type); type += \"Wrap\";");
         sb.AppendLine("\t\tswitch (type) {");
-        string[] files = Directory.GetFiles("Assets/uLua/Source/LuaWrap/", "*.cs", SearchOption.TopDirectoryOnly);
+        string[] files = Directory.GetFiles("Assets/LuaEngine/uLua/Source/LuaWrap/", "*.cs", SearchOption.TopDirectoryOnly);
 
         List<string> wrapfiles = new List<string>();
         for (int i = 0; i < files.Length; i++)
@@ -207,7 +207,7 @@ public static class LuaBinding
             wrapfiles.Add("import '" + wrapfile + "'");
         }
         if (AppConst.AutoWrapMode) {
-            string wrapfile = Application.dataPath + "/uLua/Lua/System/Wrap.lua";
+            string wrapfile = AppConst.uLuaPath + "Lua/System/Wrap.lua";
             File.WriteAllLines(wrapfile, wrapfiles.ToArray());
         }
         sb.AppendLine("\t\t}");
@@ -248,10 +248,10 @@ public static class LuaBinding
             textWriter.Close();
         }
         if (AppConst.AutoWrapMode) {
-            string wrapfile = Application.dataPath + "/uLua/Lua/System/Wrap.lua";
+            string wrapfile = AppConst.uLuaPath + "/Lua/System/Wrap.lua";
             File.WriteAllText(wrapfile, string.Empty);
         }
-        ClearFiles(AppConst.uLuaPath + "/Source/LuaWrap/");
+        ClearFiles(AppConst.uLuaPath + "Source/LuaWrap/");
         AssetDatabase.Refresh();
     }
 

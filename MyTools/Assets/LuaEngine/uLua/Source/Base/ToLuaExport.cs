@@ -2008,6 +2008,11 @@ public static class ToLuaExport
             return str.Replace('+', '.');
         }
 
+        if (str.Contains("`1"))
+        {
+            return str.Replace("`1", "").Replace('[', '<').Replace(']', '>');
+        }
+
         if (str == extendName)
         {
             return GetTypeStr(type);

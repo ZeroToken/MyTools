@@ -37,7 +37,7 @@ namespace LuaInterface
         {
             get
             {
-                return Application.dataPath + "/uLua/Lua";
+                return Application.dataPath + "/LuaEngine/uLua/Lua";
             }
         }
         /// <summary>

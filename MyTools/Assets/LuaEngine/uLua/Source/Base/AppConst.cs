@@ -13,7 +13,7 @@ public class AppConst {
 
     public static string uLuaPath {
         get {
-            return Application.dataPath + "/uLua/";
+            return Application.dataPath + "/LuaEngine/uLua/";
         }
     }
 }
