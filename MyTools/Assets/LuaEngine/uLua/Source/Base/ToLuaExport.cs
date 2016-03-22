@@ -354,15 +354,15 @@ public static class ToLuaExport
     {
         PropertyInfo[] baseProperties = null;
         FieldInfo[] baseFields = null;
-        fields = type.GetFields(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Instance | binding | BindingFlags.Static);
-        props = type.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | binding | BindingFlags.Static);
+        fields = type.GetFields(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Instance | binding);
+        props = type.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | binding);
         propList.AddRange(type.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase));
 
 
         if (type.BaseType != null)
         {
-            baseProperties = type.BaseType.GetProperties(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Static | BindingFlags.Public);
-            baseFields = type.BaseType.GetFields(BindingFlags.GetField | BindingFlags.SetField | BindingFlags.Static | BindingFlags.Public);
+            baseProperties = type.BaseType.GetProperties(BindingFlags.GetField | BindingFlags.SetField | binding);
+            baseFields = type.BaseType.GetFields(BindingFlags.GetField | BindingFlags.SetField | binding);
         }
         List<FieldInfo> fieldList = new List<FieldInfo>();
         fieldList.AddRange(fields);

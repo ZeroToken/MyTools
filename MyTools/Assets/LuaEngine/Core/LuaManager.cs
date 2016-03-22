@@ -32,7 +32,7 @@ namespace LuaInterface
             mScriptMgr.Start();
         }
 
-        public LuaState mLuastate;
+        private LuaState mLuastate;
         public LuaState luaState
         {
             get
