@@ -127,7 +127,7 @@ public static class ToLuaExport
 
     public static bool IsMemberFilter(MemberInfo mi)
     {
-        return memberFilter.Contains(type.Name + "." + mi.Name) || (type != null && memberFilter.Contains(type.BaseType.Name + "." + mi.Name));
+        return memberFilter.Contains(type.Name + "." + mi.Name) || (type.BaseType != null && memberFilter.Contains(type.BaseType.Name + "." + mi.Name));
     }
 
     static ToLuaExport()
@@ -400,7 +400,6 @@ public static class ToLuaExport
                 propList.RemoveAt(i);
             }
         }
-
         sb.AppendLine("\t\tLuaField[] fields = new LuaField[]");
         sb.AppendLine("\t\t{");
 

@@ -45,24 +45,28 @@ namespace LuaInterface
 
         public static TextAsset LoadScript(string file)
         {
+            if (file.EndsWith(".lua"))
+                file = file.Remove(file.IndexOf(".lua"));
+            file = "Lua/" + file.Replace(".", "/") + ".lua";
             return Resources.Load(file, typeof(TextAsset)) as TextAsset;
         }
 
         public static string LoadScriptText(string file)
         {
-            if (file.EndsWith(".lua"))
-                file = file.Remove(file.IndexOf(".lua"));
-            file = "Lua/" + file.Replace(".", "/") + ".lua";
-            TextAsset textAsset = Resources.Load(file, typeof(TextAsset)) as TextAsset;
-            if (textAsset != null)
-                return textAsset.text;
+            TextAsset asset = LoadScript(file);
+            if (asset != null)
+                return asset.text;
             Debug.LogWarning(string.Format("Lua Warning: {0} not loaded", file));
             return string.Empty;
         }
 
         public static byte[] LoadScriptBytes(string file)
         {
-            return System.Text.Encoding.UTF8.GetBytes(LoadScriptText(file));
+            TextAsset asset = LoadScript(file);
+            if (asset != null)
+                return asset.bytes;
+            Debug.LogWarning(string.Format("Lua Warning: {0} not loaded", file));
+            return null;
         }
 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
