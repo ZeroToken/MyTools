@@ -65,7 +65,6 @@ namespace LuaInterface
             TextAsset asset = LoadScript(file);
             if (asset != null)
                 return asset.bytes;
-            Debug.LogWarning(string.Format("Lua Warning: {0} not loaded", file));
             return null;
         }
 
