@@ -4,17 +4,20 @@ using System.Collections.Generic;
 
 public class U2DGrid : MonoBehaviour
 {
-    public UIGrid.Sorting sorting;
     public Arrangement arrangement = Arrangement.Horizontal;
-    public int maxPerLine;
     public int cellWidth = 200;
     public int cellHeight = 200;
     public UIWidget.Pivot pivot = UIWidget.Pivot.TopLeft;
     public bool isChildOnCenter;
     public int springStrength = 20;
-    public bool isOffsetCount;
+    public int offsetWidthCount = 1;
+    public int offsetHeightCount = 1;
     public bool isLoop;
     public bool isInvalidateBounds;
+    public float moveDeltaOffset = 0.01f;
+    public bool isResetScrollView;
+    public bool isAsyncFocus;
+    public int focusIndex;
 
     public enum Arrangement
     {
@@ -57,6 +60,31 @@ public class U2DGrid : MonoBehaviour
         }
     }
 
+    private UIScrollBar mScrollBar;
+    public UIScrollBar ScrollBar
+    {
+        get
+        {
+            if(mScrollBar == null)
+            {
+                switch(arrangement)
+                {
+                    case Arrangement.Horizontal:
+                    case Arrangement.MatrixHorizontal:
+                        if (ScrollView != null && ScrollView.horizontalScrollBar != null)
+                            mScrollBar = (UIScrollBar)ScrollView.horizontalScrollBar;
+                        break;
+                    case Arrangement.Vertical:
+                    case Arrangement.MatrixVertical:
+                        if (ScrollView != null && ScrollView.horizontalScrollBar != null)
+                            mScrollBar = (UIScrollBar)ScrollView.verticalScrollBar;
+                        break;
+                }
+            }
+            return mScrollBar;
+        }
+    }
+
     private List<Transform> mChildren;
     public List<Transform> Children
     {
@@ -79,71 +107,36 @@ public class U2DGrid : MonoBehaviour
         }
     }
 
-    public int TransChildCount
+    public Vector3 Center
     {
         get
         {
-            return transform.childCount;
+            Vector3[] corners = Corners;
+            return Vector3.Lerp(corners[0], corners[2], 0.5f);
         }
     }
 
-    public int WidthCount
-    {
-        get
-        {
-            int width = (int)Mathf.Abs(Corners[2].x - Corners[0].x);
-            if (isOffsetCount)
-                return width / cellWidth + (width % cellWidth > 0 ? 1 : 0);
-            return width / cellWidth;
-        }
-    }
-
-    public int HeightCount
-    {
-        get
-        {
-            int height = (int)Mathf.Abs(Corners[2].y - Corners[0].y);
-            if (isOffsetCount)
-                return height / cellHeight + (height % cellHeight > 0 ? 1 : 0);
-            return height / cellHeight;
-        }
-    }
-
+    public int TransChildCount { get { return Children.Count; } }
+    public int PanelWidthCount { get; set; }
+    public int PanelHeightCount { get; set; }
+    public int PanelCellCount { get; set; }
+    public int Line { get; set; }
+    public int Column { get; set; }
     public int HorizonCount
     {
         get
         {
             if (arrangement == Arrangement.Horizontal)
-                return WidthCount;
+                return ComputeWidthCount() - offsetWidthCount;
             else if (arrangement == Arrangement.Vertical)
-                return HeightCount;
+                return ComputeHeightCount() - offsetHeightCount;
             return 0;
         }
     }
 
-    private System.Action<int, Transform> mOnRefreshChild;
-    public System.Action<int, Transform> onRefreshChild
-    {
-        get
-        {
-            return mOnRefreshChild;
-        }
-        set
-        {
-            mOnRefreshChild = value;
-        }
-    }
-
-    public System.Action<int, Transform> onHorizonRefresh;
-
-    private int mTotalCount;
-    public int TotalCount
-    {
-        get
-        {
-            return mTotalCount;
-        }
-    }
+    public System.Action<int, Transform> onRefreshChild { get; set; }
+    public System.Action<int, Transform> onHorizonRefresh { get; set; }
+    public int TotalCount { get; set; }
 
     private Transform childPrefab;
 
@@ -159,14 +152,6 @@ public class U2DGrid : MonoBehaviour
 
     void Awake()
     {
-        if (TransChildCount > 0)
-        {
-            for (int i = 0; i < TransChildCount; i++)
-                Children.Add(transform.GetChild(i));
-            this.mTotalCount = TransChildCount;
-            Sorting();
-            ResetChildrenPosition();
-        }
         if (Panel != null) Panel.onClipMove = WrapContent;
         if (isChildOnCenter)
         {
@@ -174,7 +159,9 @@ public class U2DGrid : MonoBehaviour
             {
                 uiCenterOnChild = gameObject.AddComponent<UICenterOnChild>();
                 uiCenterOnChild.enabled = pivot != UIWidget.Pivot.Center;
-                if (isInvalidateBounds) uiCenterOnChild.onFinished = InvalidateBounds;
+                uiCenterOnChild.moveDeltaOffset = moveDeltaOffset;
+                if(isInvalidateBounds) 
+                    uiCenterOnChild.onFinished = InvalidateBounds;
             }
         }
         else if (UICenterOnChild != null)
@@ -184,85 +171,80 @@ public class U2DGrid : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (isResetScrollView)
+        {
+            this.InitializeScrollView();
+            this.isResetScrollView = false;
+        }
+        if (isAsyncFocus)
+        {
+            Focus(focusIndex);
+            isAsyncFocus = false;
+        }
+    }
+
+    public void Initialize(int totalCount, Transform prefab, UIWidget.Pivot pivot)
+    {
+        this.pivot = pivot;
+        this.Initialize(totalCount, prefab);
+    }
+
     public virtual void Initialize(int totalCount, Transform prefab)
     {
-        this.mTotalCount = totalCount;
+        this.TotalCount = totalCount;
         this.childPrefab = prefab;
-        if (arrangement == Arrangement.Horizontal)
-        {
-            int widthCount = WidthCount;
-            SetChildren(totalCount > widthCount + 1 ? widthCount + 1 : totalCount, prefab);
-        }
-        else if (arrangement == Arrangement.Vertical)
-        {
-            int heightCount = HeightCount;
-            SetChildren(totalCount > heightCount + 1 ? heightCount + 1 : totalCount, prefab);
-        }
-        else
-        {
-            SetChildren(totalCount, prefab);
-        }
-        Sorting();
-        ResetChildrenPosition();
+        this.PanelWidthCount = ComputeWidthCount();
+        this.PanelHeightCount = ComputeHeightCount();
+        this.PanelCellCount = this.PanelWidthCount * this.PanelHeightCount;
+        this.Column = ComputeColumn();
+        this.Line = ComputeLine();
+        this.InitializeCells(this.TotalCount > this.PanelCellCount ? this.PanelCellCount : this.TotalCount, this.childPrefab);
+        this.isResetScrollView = true;
     }
 
-    private void Sorting()
+    public void InitializeCells(int cellsCount, Transform cellPrefab)
     {
-        if (sorting == UIGrid.Sorting.Alphabetic)
-            mChildren.Sort(UIGrid.SortByName);
-        else if (sorting == UIGrid.Sorting.Horizontal)
-            mChildren.Sort(UIGrid.SortHorizontal);
-        else if (sorting == UIGrid.Sorting.Vertical)
-            mChildren.Sort(UIGrid.SortVertical);
-    }
-
-    public virtual void SetChildren(int count, Transform child)
-    {
-        if (child != null)
+        if (cellPrefab != null)
         {
+            int x = 0, y = 0;
             mChildren = null;
-            mChildren = transform.SetChildrenGet(count, child, onRefreshChild);
+            mChildren = transform.SetChildrenGet<Transform>(cellsCount, cellPrefab, (idx, cell) => 
+            {
+                if (cell != null)
+                {
+                    cell.localPosition = new Vector3(cellWidth * x, -cellHeight * y, cell.localPosition.z);
+                    if (++x >= PanelWidthCount)
+                    {
+                        x = 0;
+                        y++;
+                    }
+                    UpdateChild(cell, idx);
+                }
+            });
         }
     }
-    [ContextMenu("ResetChildrenPosition")]
-    public void ResetChildrenPosition()
+
+    public void InitializeCellsPosition()
     {
-        Transform child = null;
         int x = 0, y = 0;
-        int tempMaxPerLine = 0;
-        for (int i = 0; i < TransChildCount; i++)
+        Children.ForEach((value) =>
         {
-            child = mChildren[i];
-            if (child != null)
+            if (value != null)
             {
-                if (arrangement == Arrangement.Horizontal)
+                value.localPosition = new Vector3(cellWidth * x, -cellHeight * y, value.localPosition.z);
+                if (++x >= PanelWidthCount)
                 {
-                    tempMaxPerLine = 0;
-                    child.localPosition = new Vector3(cellWidth * x, -cellHeight * y, child.localPosition.z);
-                }
-                else if (arrangement == Arrangement.Vertical)
-                {
-                    tempMaxPerLine = 0;
-                    child.localPosition = new Vector3(cellWidth * y, -cellHeight * x, child.localPosition.z);
-                }
-                else if (arrangement == Arrangement.MatrixVertical)
-                {
-                    tempMaxPerLine = maxPerLine;
-                    child.localPosition = new Vector3(cellWidth * x, -cellHeight * y, child.localPosition.z);
-                }
-                else if (arrangement == Arrangement.MatrixHorizontal)
-                {
-                    tempMaxPerLine = maxPerLine;
-                    child.localPosition = new Vector3(cellWidth * y, -cellHeight * x, child.localPosition.z);
+                    x = 0;
+                    y++;
                 }
             }
-            if (++x >= tempMaxPerLine && tempMaxPerLine > 0)
-            {
-                x = 0;
-                ++y;
-            }
-            child = null;
-        }
+        });
+    }
+
+    public void InitializeScrollView()
+    {
         if (ScrollView != null)
         {
             ScrollView.contentPivot = pivot;
@@ -272,87 +254,155 @@ public class U2DGrid : MonoBehaviour
                 ScrollView.movement = UIScrollView.Movement.Vertical;
             ScrollView.ResetPosition();
         }
-        if (isChildOnCenter && uiCenterOnChild != null && pivot != UIWidget.Pivot.Center) uiCenterOnChild.Recenter();
     }
 
+    public int ComputeWidthCount()
+    {
+        switch (arrangement)
+        {
+            case Arrangement.Vertical:
+                return 1;
+            default:
+                Vector3[] corners = Corners;
+                return ((int)Mathf.Abs(corners[2].x - corners[0].x) / cellWidth) + offsetWidthCount;
+        }
+
+    }
+
+    public int ComputeHeightCount()
+    {
+        switch (arrangement)
+        {
+            case Arrangement.Horizontal:
+                return 1;
+            default:
+                Vector3[] corners = Corners;
+                return ((int)Mathf.Abs(corners[2].y - corners[0].y) / cellHeight) + offsetHeightCount;
+        }
+    }
+
+    public int ComputeLine()
+    {
+        switch (arrangement)
+        {
+            case Arrangement.Horizontal:
+                return 1;
+            case Arrangement.Vertical:
+                return TotalCount;
+            case Arrangement.MatrixHorizontal:
+                return PanelHeightCount;
+            case Arrangement.MatrixVertical:
+                return TotalCount / PanelWidthCount + (TotalCount % PanelWidthCount > 0 ? 1 : 0);
+            default:
+                return 0;
+        }
+    }
+
+    public int ComputeColumn()
+    {
+        switch (arrangement)
+        {
+            case Arrangement.Horizontal:
+                return TotalCount;
+            case Arrangement.Vertical:
+                return 1;
+            case Arrangement.MatrixHorizontal:
+                return TotalCount / PanelHeightCount + (TotalCount % PanelHeightCount > 0 ? 1 : 0);
+            case Arrangement.MatrixVertical:
+                return PanelWidthCount;
+            default:
+                return 0;
+        }
+    }
+
+    public virtual void SetChildren(int count, Transform child)
+    {
+        if (child != null)
+        {
+            mChildren = null;
+            mChildren = transform.SetChildrenGet<Transform>(count, child);
+        }
+    }
+
+    [ContextMenu("ResetChildrenPosition")]
+    public void ResetToInitialize()
+    {
+        this.InitializeCellsPosition();
+        this.InitializeScrollView();
+    }
 
     public void WrapContent(UIPanel panel)
     {
-        if (arrangement == Arrangement.Horizontal)
+        switch (arrangement)
         {
-            WrapHorizontal();
+            case Arrangement.Horizontal:
+            case Arrangement.MatrixHorizontal:
+                WrapHorizontal();
+                break;
+            case Arrangement.Vertical:
+            case Arrangement.MatrixVertical:
+                WrapVertical();
+                break;
         }
-        else if (arrangement == Arrangement.Vertical)
-        {
-            WrapVertical();
-        }
-        else
-        {
-            WrapMatrix();
-        }
+        if (ScrollView != null)
+            ScrollView.centerOnChild = null;
     }
 
     private void WrapHorizontal()
     {
-        float extents = cellWidth * Children.Count * 0.5f;
-        Vector3 center = Vector3.Lerp(Corners[0], Corners[2], 0.5f);
+        float extents = cellWidth * PanelWidthCount * 0.5f;
         float ext2 = extents * 2f;
-        if (mChildren.Count > 0)
+        Vector3[] corners = Corners;
+        for (int i = 0, imax = Children.Count; i < imax; ++i)
         {
-            for (int i = 0, imax = mChildren.Count; i < imax; ++i)
+            Transform t = Children[i];
+            if (t == null) continue;
+            float distance = t.localPosition.x - Center.x;
+            if (distance < -extents)
             {
-                Transform t = mChildren[i];
-                if (t == null) continue;
-                float distance = t.localPosition.x - center.x;
-                if (distance < -extents)
+                Vector3 pos = t.localPosition;
+                pos.x += ext2;
+                int realIndex = Mathf.RoundToInt(pos.x / cellWidth);
+                if ((0 <= realIndex && realIndex < Column) || isLoop)
                 {
-                    Vector3 pos = t.localPosition;
-                    pos.x += ext2;
-                    int realIndex = Mathf.RoundToInt(pos.x / cellWidth);
-                    if ((0 <= realIndex && realIndex <= mTotalCount - 1) || isLoop)
-                    {
-                        t.localPosition = pos;
-                        UpdateChild(t, i);
-                    }
+                    t.localPosition = pos;
+                    UpdateChild(t, i);
                 }
-                else if (distance > extents)
-                {
-                    Vector3 pos = t.localPosition;
-                    pos.x -= ext2;
-                    int realIndex = Mathf.RoundToInt(pos.x / cellWidth);
-                    if ((0 <= realIndex && realIndex <= mTotalCount - 1) || isLoop)
-                    {
-                        t.localPosition = pos;
-                        UpdateChild(t, i);
-                    }
-                }
-
-                if (t.localPosition.x < Corners[2].x && t.localPosition.x > Corners[0].x)
-                {
-                    if (onHorizonRefresh != null) onHorizonRefresh(CalcRealIndex(t), t);
-                }
-
             }
+            else if (distance > extents)
+            {
+                Vector3 pos = t.localPosition;
+                pos.x -= ext2;
+                int realIndex = Mathf.RoundToInt(pos.x / cellWidth);
+                if ((0 <= realIndex && realIndex < Column) || isLoop)
+                {
+                    t.localPosition = pos;
+                    UpdateChild(t, i);
+                }
+            }
+            if (t.localPosition.x < corners[2].x && t.localPosition.x > corners[0].x)
+            {
+                if (onHorizonRefresh != null) onHorizonRefresh(CalcRealIndex(t), t);
+            }     
         }
     }
 
     private void WrapVertical()
     {
-        float extents = cellHeight * TransChildCount * 0.5f;
+        float extents = cellHeight * PanelHeightCount * 0.5f;
         float ext2 = extents * 2f;
-        Vector3 center = Vector3.Lerp(Corners[0], Corners[2], 0.5f);
-        for (int i = 0, imax = TransChildCount; i < imax; ++i)
+        Vector3[] corners = Corners;
+        for (int i = 0, imax = Children.Count; i < imax; ++i)
         {
             Transform t = Children[i];
             if (t == null) continue;
-            float distance = t.localPosition.y - center.y;
+            float distance = t.localPosition.y - Center.y;
             if (distance < -extents)
             {
                 Vector3 pos = t.localPosition;
                 pos.y += ext2;
                 int realIndex = -Mathf.RoundToInt(pos.y / cellHeight);
-                //Debug.Log(realIndex);
-                if (0 <= realIndex && realIndex <= mTotalCount - 1 || isLoop)
+                if (0 <= realIndex && realIndex < Line || isLoop)
                 {
                     t.localPosition = pos;
                     UpdateChild(t, i);
@@ -363,46 +413,15 @@ public class U2DGrid : MonoBehaviour
                 Vector3 pos = t.localPosition;
                 pos.y -= ext2;
                 int realIndex = -Mathf.RoundToInt(pos.y / cellHeight);
-                if (0 <= realIndex && realIndex <= mTotalCount - 1 || isLoop)
+                if (0 <= realIndex && realIndex < Line || isLoop)
                 {
                     t.localPosition = pos;
                     UpdateChild(t, i);
                 }
             }
-            if (t.localPosition.x > Corners[2].y && t.localPosition.x < Corners[0].y)
+            if (t.localPosition.x > corners[2].y && t.localPosition.x < corners[0].y)
             {
                 if (onHorizonRefresh != null) onHorizonRefresh(CalcRealIndex(t), t);
-            }
-        }
-    }
-
-    private void WrapMatrix()
-    {
-        Vector3 center = Vector3.Lerp(Corners[0], Corners[2], 0.5f);
-        for (int i = 0; i < TransChildCount; i++)
-        {
-            Transform child = Children[i];
-            if (child != null)
-            {
-                float min = 0, max = 0, distance = 0;
-                if (arrangement == Arrangement.MatrixHorizontal)
-                {
-                    min = Corners[0].x - cellWidth;
-                    max = Corners[2].x + cellWidth;
-                    distance = child.localPosition.x - center.x;
-                    distance += mPanel.clipOffset.x - transform.localPosition.x;
-                }
-                else if (arrangement == Arrangement.MatrixVertical)
-                {
-                    min = Corners[0].y - cellHeight;
-                    max = Corners[2].y + cellHeight;
-                    distance = child.localPosition.y - center.y;
-                    distance += Panel.clipOffset.y - transform.localPosition.y;
-                }
-                if (!UICamera.IsPressed(child.gameObject))
-                {
-                    child.gameObject.SetActive(distance > min && distance < max);
-                }
             }
         }
     }
@@ -411,51 +430,90 @@ public class U2DGrid : MonoBehaviour
     {
         int realIndex = CalcRealIndex(child);
         child.name = childPrefab.name + realIndex;
-        if (onRefreshChild != null) onRefreshChild(realIndex, child);
+        child.gameObject.SetActive(realIndex < TotalCount);
+        if (onRefreshChild != null && child.gameObject.activeSelf)
+            onRefreshChild(realIndex, child);
     }
 
     public int CalcRealIndex(Transform trans)
     {
         if (trans != null)
-        {
-            int tempIndex = 0;
-            if (arrangement == Arrangement.Vertical)
-            {
-                tempIndex = Mathf.RoundToInt(trans.localPosition.y / cellHeight);
-                tempIndex = tempIndex % TotalCount;
-                tempIndex = tempIndex < 0 ? Mathf.Abs(tempIndex) : (tempIndex > 0 ? TotalCount - tempIndex : tempIndex);
-            }
-            else if (arrangement == Arrangement.Horizontal)
-            {
-                tempIndex = Mathf.RoundToInt(trans.localPosition.x / cellWidth);
-                tempIndex = tempIndex % TotalCount;
-                tempIndex = tempIndex < 0 ? tempIndex + TotalCount : tempIndex;
-            }
-            //int tempIndex = (arrangement == Arrangement.Vertical) ?
-            //   Mathf.RoundToInt(trans.localPosition.y / cellHeight) :
-            //   Mathf.RoundToInt(trans.localPosition.x / cellWidth);
-            //Debug.Log(tempIndex);
-            //tempIndex = tempIndex % TotalCount;
-            //tempIndex = tempIndex < 0 ? tempIndex + TotalCount : tempIndex;
-            return tempIndex;
-        }
+            return CalcRealIndex(trans.localPosition);
         return -1;
+    }
+
+    public int CalcRealIndex(Vector3 position)
+    {
+        switch (arrangement)
+        {
+            case Arrangement.Horizontal:
+                return CalcHorizontalIndex(position.x);
+            case Arrangement.Vertical:
+                return CalcVerticalIndex(position.y);
+            case Arrangement.MatrixHorizontal:
+                return Line * CalcHorizontalIndex(position.x) + CalcVerticalIndex(position.y);
+            case Arrangement.MatrixVertical:
+                return Column * CalcVerticalIndex(position.y) + CalcHorizontalIndex(position.x);
+            default:
+                return 0;
+        }
+    }
+
+    private int CalcVerticalIndex(float positionY)
+    {
+        int cacheIndex = 0, line = Line;
+        cacheIndex = Mathf.RoundToInt(positionY / cellHeight);
+        cacheIndex = cacheIndex % line;
+        cacheIndex = cacheIndex < 0 ? Mathf.Abs(cacheIndex) : (cacheIndex > 0 ? line - cacheIndex : 0);
+        return cacheIndex;
+    }
+
+    private int CalcHorizontalIndex(float positionX)
+    {
+        int cacheIndex = 0;
+        cacheIndex = Mathf.RoundToInt(positionX / cellWidth);
+        cacheIndex = cacheIndex % Column;
+        cacheIndex = cacheIndex < 0 ? cacheIndex + Column : cacheIndex;
+        return cacheIndex;
     }
 
     public void FocusOn(int index)
     {
-        if (TransChildCount > HorizonCount)
+        switch (arrangement)
+        {
+            case Arrangement.MatrixHorizontal:
+            case Arrangement.Horizontal:
+                index = index / Line;
+                int onPanelWidthCount = PanelWidthCount - offsetWidthCount;
+                index = index + onPanelWidthCount > Column ? Column - onPanelWidthCount : index;
+                break;
+            case Arrangement.MatrixVertical:
+            case Arrangement.Vertical:
+                index = index / Column;
+                int onPanelHeightCount = PanelHeightCount - offsetHeightCount;
+                index = index + onPanelHeightCount > Line ? Line - onPanelHeightCount : index;
+                break;
+        }
+        focusIndex = index;
+        isAsyncFocus = true;
+        //Focus(index);
+    }
+
+    public void Focus(int index)
+    {
+        if (Children.Count > HorizonCount)
         {
             Vector3 focusPos = Vector3.zero;
-            if (arrangement == Arrangement.Horizontal)
+            switch (arrangement)
             {
-                int minRealIndex = CalcRealIndex(MinPosTransform);
-                focusPos = ScrollView.transform.localPosition - new Vector3(cellWidth * (index - minRealIndex), 0, 0);
-            }
-            else if (arrangement == Arrangement.Vertical)
-            {
-                int minRealIndex = CalcRealIndex(MaxPosTransform);
-                focusPos = ScrollView.transform.localPosition + new Vector3(0, cellHeight * (index - minRealIndex), 0);
+                case Arrangement.MatrixHorizontal:
+                case Arrangement.Horizontal:
+                    focusPos = ScrollView.transform.localPosition - new Vector3(cellWidth * (index - (CalcRealIndex(MinPosTransform) / Line)), 0, 0);
+                    break;
+                case Arrangement.MatrixVertical:
+                case Arrangement.Vertical:
+                    focusPos = ScrollView.transform.localPosition + new Vector3(0, cellHeight * (index - (CalcRealIndex(MaxPosTransform) / Column)), 0);
+                    break;
             }
             MoveTo(focusPos, springStrength);
         }
@@ -467,18 +525,14 @@ public class U2DGrid : MonoBehaviour
         {
             MoveTo(ScrollView.transform.localPosition - new Vector3(cellWidth, 0, 0), springStrength);
         }
-        else if (arrangement == Arrangement.Vertical)
+        else if(arrangement == Arrangement.Vertical)
         {
             MoveTo(ScrollView.transform.localPosition + new Vector3(0, cellHeight, 0), springStrength);
         }
 
     }
 
-    public void FocusOnIndex(int index)
-    {
-        index = index + HorizonCount >= TotalCount ? TotalCount - HorizonCount : index;
-        FocusOn(index);
-    }
+
 
     public void MoveTo(Vector3 target, float stength)
     {
@@ -503,15 +557,16 @@ public class U2DGrid : MonoBehaviour
         {
             return mChildren.Find((x) =>
             {
-                if (arrangement == Arrangement.Horizontal)
+                switch (arrangement)
                 {
-                    float offsetX = x.localPosition.x - Corners[0].x;
-                    return offsetX >= 0 && offsetX <= cellWidth;
-                }
-                else if (arrangement == Arrangement.Vertical)
-                {
-                    float offsetY = x.localPosition.y - Corners[0].y;
-                    return offsetY >= 0 && offsetY <= cellHeight;
+                    case Arrangement.Horizontal:
+                    case Arrangement.MatrixHorizontal:
+                        float offsetX = x.localPosition.x - Corners[0].x;
+                        return offsetX >= 0 && offsetX <= cellWidth;
+                    case Arrangement.Vertical:
+                    case Arrangement.MatrixVertical:
+                        float offsetY = x.localPosition.y - Corners[0].y;
+                        return offsetY >= 0 && offsetY <= cellHeight;
                 }
                 return false;
             });
@@ -524,15 +579,16 @@ public class U2DGrid : MonoBehaviour
         {
             return mChildren.Find((x) =>
             {
-                if (arrangement == Arrangement.Horizontal)
+                switch (arrangement)
                 {
-                    float offsetX = Corners[2].x - x.localPosition.x;
-                    return offsetX >= 0 && offsetX <= cellWidth;
-                }
-                else if (arrangement == Arrangement.Vertical)
-                {
-                    float offsetY = Corners[2].y - x.localPosition.y;
-                    return offsetY >= 0 && offsetY <= cellHeight;
+                    case Arrangement.Horizontal:
+                    case Arrangement.MatrixHorizontal:
+                        float offsetX = Corners[2].x - x.localPosition.x;
+                        return offsetX >= 0 && offsetX <= cellWidth;
+                    case Arrangement.Vertical:
+                    case Arrangement.MatrixVertical:
+                        float offsetY = Corners[2].y - x.localPosition.y;
+                        return offsetY >= 0 && offsetY <= cellHeight;
                 }
                 return false;
             });
@@ -552,7 +608,7 @@ public class U2DGrid : MonoBehaviour
                 span = mDragIndex;
             mDragIndex -= span;
         }
-        FocusOn(mDragIndex);
+        Focus(mDragIndex);
     }
 
     public void DragRight(int span = 1)
@@ -572,6 +628,6 @@ public class U2DGrid : MonoBehaviour
             }
             mDragIndex += span;
         }
-        FocusOn(mDragIndex);
+        Focus(mDragIndex);
     }
 }
