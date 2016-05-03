@@ -6,7 +6,7 @@ public class UIToggleSlider : MonoBehaviour
 {
     public UIGrid uiToggleGrid;
     public Transform uiTogglePrefab;
-    public U2DGrid uiViewGrid;
+    public SliderGrid uiViewGrid;
     public Transform uiViewPrefab;
     public bool isLoop;
     public bool isAutoPlay;

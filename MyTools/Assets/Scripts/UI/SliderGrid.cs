@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class U2DGrid : MonoBehaviour
+public class SliderGrid : MonoBehaviour
 {
     public Arrangement arrangement = Arrangement.Horizontal;
     public int cellWidth = 200;
@@ -264,7 +264,9 @@ public class U2DGrid : MonoBehaviour
                 return 1;
             default:
                 Vector3[] corners = Corners;
-                return ((int)Mathf.Abs(corners[2].x - corners[0].x) / cellWidth) + offsetWidthCount;
+                int cornerWidth = (int)Mathf.Abs(corners[2].x - corners[0].x);
+                cornerWidth = Mathf.Max(cornerWidth, cellWidth);
+                return (cornerWidth / cellWidth + Mathf.Min(1, cornerWidth % cellWidth)) + offsetWidthCount;
         }
 
     }
@@ -277,7 +279,9 @@ public class U2DGrid : MonoBehaviour
                 return 1;
             default:
                 Vector3[] corners = Corners;
-                return ((int)Mathf.Abs(corners[2].y - corners[0].y) / cellHeight) + offsetHeightCount;
+                int cornerHeight = (int)Mathf.Abs(corners[2].y - corners[0].y);
+                cornerHeight = Mathf.Max(cornerHeight, cellHeight);
+                return (cornerHeight / cellHeight + Mathf.Min(1, cornerHeight % cellHeight)) + offsetHeightCount;
         }
     }
 

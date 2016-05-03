@@ -2,20 +2,20 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(U2DGrid))]
-public class U2DGridEditor : Editor 
+[CustomEditor(typeof(SliderGrid))]
+public class SliderGridEditor : Editor 
 {
     public override void OnInspectorGUI()
     {
-        U2DGrid mGrid = target as U2DGrid;
-        mGrid.arrangement = (U2DGrid.Arrangement)EditorGUILayout.EnumPopup("Arrangement", mGrid.arrangement);
-        if (mGrid.arrangement == U2DGrid.Arrangement.Horizontal)
+        SliderGrid mGrid = target as SliderGrid;
+        mGrid.arrangement = (SliderGrid.Arrangement)EditorGUILayout.EnumPopup("Arrangement", mGrid.arrangement);
+        if (mGrid.arrangement == SliderGrid.Arrangement.Horizontal)
         {
             mGrid.cellWidth = EditorGUILayout.IntField("Cell Width", mGrid.cellWidth);
             mGrid.offsetWidthCount = EditorGUILayout.IntField("Offset Width Count", mGrid.offsetWidthCount);
         }
 
-        else if (mGrid.arrangement == U2DGrid.Arrangement.Vertical)
+        else if (mGrid.arrangement == SliderGrid.Arrangement.Vertical)
         {
             mGrid.cellHeight = EditorGUILayout.IntField("Cell Height", mGrid.cellHeight);
             mGrid.offsetHeightCount = EditorGUILayout.IntField("Offset Height Count", mGrid.offsetHeightCount);
