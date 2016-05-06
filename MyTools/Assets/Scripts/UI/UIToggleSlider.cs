@@ -66,7 +66,7 @@ public class UIToggleSlider : MonoBehaviour
     {
         if (uiToggleGrid != null)
         {
-            toggles = uiToggleGrid.transform.SetChildrenGet<UIToggle>(viewCount, uiTogglePrefab, (idx, child) =>
+            toggles = uiToggleGrid.transform.SetChildren<UIToggle>(viewCount, uiTogglePrefab, (idx, child) =>
             {
                 if (child != null)
                 {

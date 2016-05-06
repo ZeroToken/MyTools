@@ -83,7 +83,6 @@ public static class WrapFile {
         _GT(typeof(Texture)),
         _GT(typeof(RenderTexture)),
         _GT(typeof(ParticleSystem)),
-        _GT(typeof(TestImport)),
         
 
         //ngui

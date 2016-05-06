@@ -36,7 +36,6 @@ public class SliderGridEditor : Editor
             mGrid.isInvalidateBounds = EditorGUILayout.Toggle("Is Invalidate Bounds", mGrid.isInvalidateBounds);
             mGrid.moveDeltaOffset = EditorGUILayout.FloatField("Move Delta Offset", mGrid.moveDeltaOffset);
         }
-
         EditorUtility.SetDirty(target);
     }
             

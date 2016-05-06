@@ -19,6 +19,7 @@ public class SliderGrid : MonoBehaviour
     public bool isAsyncFocus;
     public int focusIndex;
 
+
     public enum Arrangement
     {
         Horizontal,
@@ -57,31 +58,6 @@ public class SliderGrid : MonoBehaviour
             if (uiCenterOnChild == null)
                 uiCenterOnChild = GetComponent<UICenterOnChild>();
             return uiCenterOnChild;
-        }
-    }
-
-    private UIScrollBar mScrollBar;
-    public UIScrollBar ScrollBar
-    {
-        get
-        {
-            if(mScrollBar == null)
-            {
-                switch(arrangement)
-                {
-                    case Arrangement.Horizontal:
-                    case Arrangement.MatrixHorizontal:
-                        if (ScrollView != null && ScrollView.horizontalScrollBar != null)
-                            mScrollBar = (UIScrollBar)ScrollView.horizontalScrollBar;
-                        break;
-                    case Arrangement.Vertical:
-                    case Arrangement.MatrixVertical:
-                        if (ScrollView != null && ScrollView.horizontalScrollBar != null)
-                            mScrollBar = (UIScrollBar)ScrollView.verticalScrollBar;
-                        break;
-                }
-            }
-            return mScrollBar;
         }
     }
 
@@ -210,7 +186,7 @@ public class SliderGrid : MonoBehaviour
         {
             int x = 0, y = 0;
             mChildren = null;
-            mChildren = transform.SetChildrenGet<Transform>(cellsCount, cellPrefab, (idx, cell) => 
+            mChildren = transform.SetChildren(cellsCount, cellPrefab, (idx, cell) => 
             {
                 if (cell != null)
                 {
@@ -324,7 +300,7 @@ public class SliderGrid : MonoBehaviour
         if (child != null)
         {
             mChildren = null;
-            mChildren = transform.SetChildrenGet<Transform>(count, child);
+            mChildren = transform.SetChildren(count, child);
         }
     }
 
