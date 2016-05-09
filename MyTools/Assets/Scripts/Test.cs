@@ -9,6 +9,7 @@ public class Test : MonoBehaviour {
     public GameObject btn;
     public GridSlider sliderGrid;
     public int index;
+    public int count = 100;
     void Awake()
     {
         //grid.Initialize(100, prefab);
@@ -23,7 +24,7 @@ public class Test : MonoBehaviour {
 
     void Start()
     {
-        sliderGrid.Initialize(100, (idx, cell) =>
+        sliderGrid.Initialize(count, (idx, cell) =>
         {
             cell.GetComponentInChildren<UILabel>().text = idx.ToString();
         });

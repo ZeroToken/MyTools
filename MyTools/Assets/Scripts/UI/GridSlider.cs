@@ -69,6 +69,7 @@ public class GridSlider : MonoBehaviour
     /// delegate refresh in the visual field of the cell
     /// </summary>
     public DelegateAssembly.onTransformRefresh onVisualCellRefresh { get; set; }
+    public bool isSliderFinished { get; set; }
     #endregion
 
     #region Event
@@ -76,6 +77,19 @@ public class GridSlider : MonoBehaviour
     {
         grid.Panel = NGUITools.FindInParents<UIPanel>(gameObject);
         if (grid.Panel != null) grid.Panel.onClipMove = OnMoveGrid;
+        if (this.ScrollView != null) this.ScrollView.onStoppedMoving = OnStoppedMoving;
+        if (this.ScrollView != null) this.ScrollView.onDragStarted = OnDragStarted;
+    }
+
+    private void OnDragStarted()
+    {
+        this.isSliderFinished = false;
+    }
+
+    private void OnStoppedMoving()
+    {
+        this.isSliderFinished = true;
+        //this.sliderNow = false;
     }
     /// <summary>
     /// Refresh cells when dragging
@@ -95,11 +109,11 @@ public class GridSlider : MonoBehaviour
     {
         float extents = grid.Size.x * 0.5f;
         Vector3[] corners = grid.Corners;
-        int i = 0;
         grid.ForeachCells((cell) =>
         {
             if (cell == null) return;
-            float distance = cell.localPosition.x - grid.Center.x;
+            Vector3 withRespectPanelPos = grid.InverseTransformPoint(cell);
+            float distance = withRespectPanelPos.x - grid.Center.x;
             if (distance < -extents)
             {
                 Vector3 pos = cell.localPosition;
@@ -122,11 +136,10 @@ public class GridSlider : MonoBehaviour
                     this.SwitchCellRefresh(cell);
                 }
             }
-            if (cell.localPosition.x < corners[2].x && cell.localPosition.x > corners[0].x)
+            if (withRespectPanelPos.x < corners[2].x && withRespectPanelPos.x > corners[0].x)
             {
                 if (onVisualCellRefresh != null) onVisualCellRefresh(GetCellIndex(cell), cell);
             }
-            i++;
         });
     }
     /// <summary>
@@ -139,7 +152,8 @@ public class GridSlider : MonoBehaviour
         grid.ForeachCells((cell) =>
         {
             if (cell == null) return;
-            float distance = cell.localPosition.y - grid.Center.y;
+            Vector3 withRespectPanelPos = grid.InverseTransformPoint(cell);
+            float distance = withRespectPanelPos.y - grid.Center.y;
             if (distance < -extents)
             {
                 Vector3 pos = cell.localPosition;
@@ -162,7 +176,7 @@ public class GridSlider : MonoBehaviour
                     this.SwitchCellRefresh(cell);
                 }
             }
-            if (cell.localPosition.x > corners[2].y && cell.localPosition.x < corners[0].y)
+            if (withRespectPanelPos.x > corners[2].y && withRespectPanelPos.x < corners[0].y)
             {
                 if (onVisualCellRefresh != null) onVisualCellRefresh(GetCellIndex(cell), cell);
             }
@@ -178,7 +192,7 @@ public class GridSlider : MonoBehaviour
             this.ScrollViewReset();
             repositionNow = false;
         }
-        if(sliderNow)
+        if (sliderNow && isSliderFinished)
         {
             try
             {
@@ -207,6 +221,7 @@ public class GridSlider : MonoBehaviour
         this.column = GetColumn();
         this.grid.SpreadOutCells(transform, totalCount, SwitchCellRefresh);
         this.repositionNow = true;
+        this.isSliderFinished = true;
     }
     /// <summary>
     /// reset scrollview info
@@ -341,7 +356,7 @@ public class GridSlider : MonoBehaviour
         {
             to = ScrollView.transform.localPosition + new Vector3(0, grid.cellHeight * (index - (GetCellIndex(cornerCells[2]) / column)), 0);
         }
-        sliderToPostion = to;
+        this.sliderToPostion = to;
     }
     /// <summary>
     /// Slide to a coordinate
@@ -354,6 +369,7 @@ public class GridSlider : MonoBehaviour
         ScrollView.InvalidateBounds();
         springPanel.onFinished = () =>
         {
+            isSliderFinished = true;
             InvalidateBounds();
         };
     }

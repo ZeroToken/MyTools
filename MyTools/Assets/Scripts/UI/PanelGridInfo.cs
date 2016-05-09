@@ -74,10 +74,11 @@ public class PanelGridInfo
         {
             if (Panel != null)
             {
-                Vector3[] corners = Panel.worldCorners;
-                for (int i = 0; i < corners.Length; i++)
-                    corners[i] = Panel.transform.InverseTransformPoint(corners[i]);
-                return corners;
+                return Panel.localCorners;
+                //Vector3[] corners = Panel.worldCorners;
+                //for (int i = 0; i < corners.Length; i++)
+                //    corners[i] = Panel.transform.InverseTransformPoint(corners[i]);
+                //return corners;
             }
             return null;
         }
@@ -104,100 +105,47 @@ public class PanelGridInfo
         {
             Vector3[] corners = Corners;
             Transform[] cornerCells = new Transform[corners.Length];
-            for (int i = 0; i < cornerCells.Length; i++)
-                cornerCells[i] = cells[0];
-            float distanceAx = 0, distanceBx = 0, distanceAy, distanceBy;
+            Vector3[] cornerCellPositions = new Vector3[corners.Length];
+            for (int i = 0; i < cornerCellPositions.Length; i++)
+                cornerCellPositions[i] = Panel.transform.InverseTransformPoint(cells[0].position);
             Vector3 cell = Vector3.zero;
-            for (int i = 1; i < cells.Count; i++)
+            for (int i = 0; i < cells.Count; i++)
             {
                 if(cells[i] == null) continue;
-                cell = cells[i].localPosition;
-                if (cell.x >= corners[0].x && cell.x <= corners[3].x && cell.y <= corners[0].y && cell.y >= corners[3].y)
+                cell = Panel.transform.InverseTransformPoint(cells[i].position);
+                if (cell.x >= corners[1].x && cell.x <= corners[3].x && cell.y <= corners[1].y && cell.y >= corners[3].y)
                 {
-                    //The upper left corner cell
-                    distanceAx = cornerCells[0].localPosition.x - corners[0].x;
-                    distanceBx = cell.x - corners[0].x;
-                    if (distanceAx < 0 || distanceBx >= 0 && Mathf.Abs(distanceBx) <= Mathf.Abs(distanceAx))
+                    //The bottom left corner cell
+                    if (cornerCells[0] == null || Mathf.Abs(cell.x - corners[0].x) <= Mathf.Abs(cornerCellPositions[0].x - corners[0].x)
+                        && Mathf.Abs(corners[0].y - cell.y) <= Mathf.Abs(corners[0].y - cornerCellPositions[0].y))
                     {
-                        distanceAy = cornerCells[0].localPosition.y - corners[0].y;
-                        distanceBy = cell.y - corners[0].y;
-                        if (distanceAy > 0 || distanceBy <= 0 && Mathf.Abs(distanceBy) <= Mathf.Abs(distanceAy))
-                            cornerCells[0] = cells[i];
+                        cornerCells[0] = cells[i];
+                        cornerCellPositions[0] = Panel.transform.InverseTransformPoint(cells[i].position);
+                    }
+                    //The upper left corner cell
+                    if (cornerCells[1] == null || Mathf.Abs(cell.x - corners[1].x) <= Mathf.Abs(cornerCellPositions[1].x - corners[1].x)
+                        && Mathf.Abs(cell.y - corners[1].y) <= Mathf.Abs(cornerCellPositions[1].y - corners[1].y))
+                    {
+                        cornerCells[1] = cells[i];
+                        cornerCellPositions[1] = Panel.transform.InverseTransformPoint(cells[i].position);
+                    }
+                    //The upper right corner cell
+                    if (cornerCells[2] == null || Mathf.Abs(corners[2].x - cell.x) <= Mathf.Abs(corners[2].x - cornerCellPositions[2].x)
+                        && Mathf.Abs(cell.y - corners[2].y) <= Mathf.Abs(cornerCellPositions[2].y - corners[2].y))
+                    {
+                        cornerCells[2] = cells[i];
+                        cornerCellPositions[2] = Panel.transform.InverseTransformPoint(cells[i].position);
+                    }
+                    //The bottom right corner cell
+                    if (cornerCells[3] == null || Mathf.Abs(corners[3].x - cell.x) <= Mathf.Abs(corners[3].x - cornerCellPositions[3].x)
+                        && Mathf.Abs(corners[3].y - cell.y) <= Mathf.Abs(corners[3].y - cornerCellPositions[3].y))
+                    {
+                        cornerCells[3] = cells[i];
+                        cornerCellPositions[3] = Panel.transform.InverseTransformPoint(cells[i].position);
                     }
                 }
-
-
-
-                //distanceAx = cornerCells[0].localPosition.x - corners[0].x;
-                //distanceB = cells[i].localPosition.x - corners[0].x;
-                ////The upper left corner cell
-                //if (distanceA < 0 || distanceB >= 0 && distanceB < distanceA)
-                //{
-                //    cornerCells[0] = cells[i];
-                //    //The bottom left corner cell
-                //    distanceA = corners[1].y - cornerCells[1].localPosition.y;
-                //    distanceB = corners[1].y - cells[i].localPosition.y;
-                //    if (distanceA < 0 || distanceB >= 0 && distanceB < distanceA)
-                //    {
-                //        cornerCells[1] = cells[i];
-                //    }
-                //}
-                //else
-                //{
-                //    //The upper right corner cell
-                //    distanceA = corners[2].x - cornerCells[2].localPosition.x;
-                //    distanceB = corners[2].x - cells[i].localPosition.x;
-                //    if (distanceA < 0 || distanceB >= 0 && distanceB < distanceA)
-                //    {
-                //        cornerCells[2] = cells[i];
-                //        //The bottom right corner cell
-                //        distanceA = corners[3].y - cornerCells[3].localPosition.y;
-                //        distanceB = corners[3].y - cells[i].localPosition.y;
-                //        if (distanceA < 0 || distanceB >= 0 && distanceB < distanceA)
-                //        {
-                //            cornerCells[3] = cells[i];
-                //        }
-                //    }
-                //} 
             }
-                //float offsetX = 0, offsetY = 0;
-                //Transform cell = null;
-                //for(int i = 0; i < cells.Count; i++)
-                //{
-                //    cell = cells[i];
-                //    //The upper left corner cell
-                //    offsetX = cell.localPosition.x - corners[0].x;
-                //    offsetY = Mathf.Abs(cell.localPosition.y - corners[0].y);
-                //    if (offsetX >= 0 && offsetX <= cellWidth && offsetY <= cellHeight)
-                //        if(cornerCells[0] == null) cornerCells[0] = cell;
-                //    else
-                //    {
-                //        //The bottom left corner cell
-                //        offsetX = cell.localPosition.x - corners[1].x;
-                //        offsetY = Mathf.Abs(corners[1].y - cell.localPosition.y);
-                //        if (offsetX >= 0 && offsetX <= cellWidth && offsetY <= cellHeight)
-                //            if (cornerCells[1] == null) cornerCells[1] = cell;
-                //        else
-                //        {
-                //            //The upper right corner cell
-                //            offsetX = corners[2].x - cell.localPosition.x;
-                //            offsetY = cell.localPosition.y - corners[2].y;
-                //            if (offsetX >= 0 && offsetX <= cellWidth && offsetY <= cellHeight)
-                //                if (cornerCells[2] == null) cornerCells[2] = cell;
-                //            else
-                //            {
-
-                //                //The bottom right corner cell
-                //                offsetX = corners[3].x - cell.localPosition.x;
-                //                offsetY = Mathf.Abs(corners[3].y - cell.localPosition.y);
-                //                if (offsetX >= 0 && offsetX <= cellWidth && offsetY <= cellHeight)
-                //                    if (cornerCells[3] == null) cornerCells[3] = cell;
-                //            }
-                //        }
-                //    }
-                //    cell = null;
-                //}
-                return cornerCells;
+            return cornerCells;
         }
     }
     #endregion
@@ -257,6 +205,15 @@ public class PanelGridInfo
                 onForeach(cells[i]);
             }
         }
+    }
+
+    public Vector3 InverseTransformPoint(Transform cell)
+    {
+        if (Panel != null)
+        {
+            return Panel.transform.InverseTransformPoint(cell.position);
+        }
+        return Vector3.zero;
     }
     #endregion
 }
