@@ -16,16 +16,16 @@ public class PanelMask : MonoBehaviour
     public Vector4 PanelArea()
     {
         Vector4 nguiArea = new Vector4();
-        var clipRegion = panel.finalClipRegion;
+        Vector4 clipRegion = panel.finalClipRegion;
         nguiArea.x = clipRegion.x - clipRegion.z / 2;
         nguiArea.y = clipRegion.y - clipRegion.w / 2;
         nguiArea.z = clipRegion.x + clipRegion.z / 2;
         nguiArea.w = clipRegion.y + clipRegion.w / 2;
 
-        var uiRoot = UIRoot.list[0];
+        UIRoot uiRoot = UIRoot.list[0];
         float h = 2;
         Vector4 clipArea = new Vector4();
-        var pos = panel.transform.position - uiRoot.transform.position;
+        Vector3 pos = panel.transform.position - uiRoot.transform.position;
         clipArea.x = pos.x + nguiArea.x * h / uiRoot.manualHeight;
         clipArea.y = pos.y + nguiArea.y * h / uiRoot.manualHeight;
         clipArea.z = pos.x + nguiArea.z * h / uiRoot.manualHeight;
@@ -36,7 +36,7 @@ public class PanelMask : MonoBehaviour
     void Clip()
     {
         Vector4 clipArea = PanelArea();
-        var particleSystems = this.GetComponentsInChildren<ParticleSystem>();
+        ParticleSystem[] particleSystems = this.GetComponentsInChildren<ParticleSystem>();
         Shader _shader = Shader.Find(shaderName);
         Material _mat = null;
         for (int i = 0; i < particleSystems.Length; i++)
@@ -44,6 +44,7 @@ public class PanelMask : MonoBehaviour
             _mat = particleSystems[i].renderer.sharedMaterial;
             if (_mat != null)
             {
+                if (_shader != null)
                 _mat.shader = _shader;
                 _mat.SetFloat("_MinX", clipArea[0]);
                 _mat.SetFloat("_MinY", clipArea[1]);
@@ -51,21 +52,5 @@ public class PanelMask : MonoBehaviour
                 _mat.SetFloat("_MaxY", clipArea[3]);
             }
         }
-
-        MeshRenderer[] _renderers = this.GetComponentsInChildren<MeshRenderer>();
-
-        for (int i = 0; i < _renderers.Length; i++)
-        {
-            _mat = _renderers[i].renderer.sharedMaterial;
-            if (_mat != null)
-            {
-                _mat.shader = _shader;
-                _mat.SetFloat("_MinX", clipArea[0]);
-                _mat.SetFloat("_MinY", clipArea[1]);
-                _mat.SetFloat("_MaxX", clipArea[2]);
-                _mat.SetFloat("_MaxY", clipArea[3]);
-            }
-        }
-
     }
 }
