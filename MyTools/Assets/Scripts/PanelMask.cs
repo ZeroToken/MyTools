@@ -41,11 +41,16 @@ public class PanelMask : MonoBehaviour
         Material _mat = null;
         for (int i = 0; i < particleSystems.Length; i++)
         {
+#if UNITY_EDITOR
+            //在编辑器模式下使用material，防止本地文件被修改
+            _mat = particleSystems[i].renderer.material;
+#else
             _mat = particleSystems[i].renderer.sharedMaterial;
+#endif
             if (_mat != null)
             {
                 if (_shader != null)
-                _mat.shader = _shader;
+                    _mat.shader = _shader;
                 _mat.SetFloat("_MinX", clipArea[0]);
                 _mat.SetFloat("_MinY", clipArea[1]);
                 _mat.SetFloat("_MaxX", clipArea[2]);
