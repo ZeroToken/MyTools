@@ -28,22 +28,6 @@ public class ComponentWrap
 		LuaField[] fields = new LuaField[]
 		{
 			new LuaField("transform", get_transform, null),
-			new LuaField("rigidbody", get_rigidbody, null),
-			new LuaField("rigidbody2D", get_rigidbody2D, null),
-			new LuaField("camera", get_camera, null),
-			new LuaField("light", get_light, null),
-			new LuaField("animation", get_animation, null),
-			new LuaField("constantForce", get_constantForce, null),
-			new LuaField("renderer", get_renderer, null),
-			new LuaField("audio", get_audio, null),
-			new LuaField("guiText", get_guiText, null),
-			new LuaField("networkView", get_networkView, null),
-			new LuaField("guiTexture", get_guiTexture, null),
-			new LuaField("collider", get_collider, null),
-			new LuaField("collider2D", get_collider2D, null),
-			new LuaField("hingeJoint", get_hingeJoint, null),
-			new LuaField("particleEmitter", get_particleEmitter, null),
-			new LuaField("particleSystem", get_particleSystem, null),
 			new LuaField("gameObject", get_gameObject, null),
 			new LuaField("tag", get_tag, set_tag),
 		};
@@ -100,390 +84,6 @@ public class ComponentWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.transform);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_rigidbody(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name rigidbody");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index rigidbody on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.rigidbody);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_rigidbody2D(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name rigidbody2D");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index rigidbody2D on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.rigidbody2D);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_camera(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name camera");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index camera on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.camera);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_light(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name light");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index light on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.light);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_animation(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name animation");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index animation on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.animation);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_constantForce(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name constantForce");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index constantForce on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.constantForce);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_renderer(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name renderer");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index renderer on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.renderer);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_audio(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name audio");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index audio on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.audio);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_guiText(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name guiText");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index guiText on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.guiText);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_networkView(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name networkView");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index networkView on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.networkView);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_guiTexture(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name guiTexture");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index guiTexture on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.guiTexture);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_collider(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name collider");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index collider on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.collider);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_collider2D(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name collider2D");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index collider2D on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.collider2D);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_hingeJoint(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name hingeJoint");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index hingeJoint on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.hingeJoint);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_particleEmitter(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name particleEmitter");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index particleEmitter on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.particleEmitter);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_particleSystem(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Component obj = (Component)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name particleSystem");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index particleSystem on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.particleSystem);
 		return 1;
 	}
 
@@ -591,12 +191,31 @@ public class ComponentWrap
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int GetComponentInChildren(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 2);
-		Component obj = (Component)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Component");
-		Type arg0 = LuaScriptMgr.GetTypeObject(L, 2);
-		Component o = obj.GetComponentInChildren(arg0);
-		LuaScriptMgr.Push(L, o);
-		return 1;
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 2)
+		{
+			Component obj = (Component)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Component");
+			Type arg0 = LuaScriptMgr.GetTypeObject(L, 2);
+			Component o = obj.GetComponentInChildren(arg0);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 3)
+		{
+			Component obj = (Component)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Component");
+			Type arg0 = LuaScriptMgr.GetTypeObject(L, 2);
+			bool arg1 = LuaScriptMgr.GetBoolean(L, 3);
+			Component o = obj.GetComponentInChildren(arg0,arg1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Component.GetComponentInChildren");
+		}
+
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

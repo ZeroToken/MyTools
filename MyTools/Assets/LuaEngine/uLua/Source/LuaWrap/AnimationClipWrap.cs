@@ -9,6 +9,7 @@ public class AnimationClipWrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
+			new LuaMethod("SampleAnimation", SampleAnimation),
 			new LuaMethod("SetCurve", SetCurve),
 			new LuaMethod("EnsureQuaternionContinuity", EnsureQuaternionContinuity),
 			new LuaMethod("ClearCurves", ClearCurves),
@@ -24,6 +25,9 @@ public class AnimationClipWrap
 			new LuaField("frameRate", get_frameRate, set_frameRate),
 			new LuaField("wrapMode", get_wrapMode, set_wrapMode),
 			new LuaField("localBounds", get_localBounds, set_localBounds),
+			new LuaField("legacy", get_legacy, set_legacy),
+			new LuaField("humanMotion", get_humanMotion, null),
+			new LuaField("events", get_events, set_events),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.AnimationClip", typeof(AnimationClip), regs, fields, typeof(UnityEngine.Object));
@@ -154,6 +158,78 @@ public class AnimationClipWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_legacy(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AnimationClip obj = (AnimationClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name legacy");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index legacy on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.legacy);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_humanMotion(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AnimationClip obj = (AnimationClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name humanMotion");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index humanMotion on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.humanMotion);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_events(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AnimationClip obj = (AnimationClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name events");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index events on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushArray(L, obj.events);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_frameRate(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -222,6 +298,65 @@ public class AnimationClipWrap
 		}
 
 		obj.localBounds = LuaScriptMgr.GetBounds(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_legacy(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AnimationClip obj = (AnimationClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name legacy");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index legacy on a nil value");
+			}
+		}
+
+		obj.legacy = LuaScriptMgr.GetBoolean(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_events(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AnimationClip obj = (AnimationClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name events");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index events on a nil value");
+			}
+		}
+
+		obj.events = LuaScriptMgr.GetArrayObject<AnimationEvent>(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SampleAnimation(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		AnimationClip obj = (AnimationClip)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AnimationClip");
+		GameObject arg0 = (GameObject)LuaScriptMgr.GetUnityObject(L, 2, typeof(GameObject));
+		float arg1 = (float)LuaScriptMgr.GetNumber(L, 3);
+		obj.SampleAnimation(arg0,arg1);
 		return 0;
 	}
 

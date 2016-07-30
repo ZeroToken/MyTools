@@ -9,14 +9,20 @@ public class AssetBundleWrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
-			new LuaMethod("CreateFromMemory", CreateFromMemory),
-			new LuaMethod("CreateFromMemoryImmediate", CreateFromMemoryImmediate),
-			new LuaMethod("CreateFromFile", CreateFromFile),
+			new LuaMethod("LoadFromFileAsync", LoadFromFileAsync),
+			new LuaMethod("LoadFromFile", LoadFromFile),
+			new LuaMethod("LoadFromMemoryAsync", LoadFromMemoryAsync),
+			new LuaMethod("LoadFromMemory", LoadFromMemory),
 			new LuaMethod("Contains", Contains),
-			new LuaMethod("Load", Load),
-			new LuaMethod("LoadAsync", LoadAsync),
-			new LuaMethod("LoadAll", LoadAll),
+			new LuaMethod("LoadAsset", LoadAsset),
+			new LuaMethod("LoadAssetAsync", LoadAssetAsync),
+			new LuaMethod("LoadAssetWithSubAssets", LoadAssetWithSubAssets),
+			new LuaMethod("LoadAssetWithSubAssetsAsync", LoadAssetWithSubAssetsAsync),
+			new LuaMethod("LoadAllAssets", LoadAllAssets),
+			new LuaMethod("LoadAllAssetsAsync", LoadAllAssetsAsync),
 			new LuaMethod("Unload", Unload),
+			new LuaMethod("GetAllAssetNames", GetAllAssetNames),
+			new LuaMethod("GetAllScenePaths", GetAllScenePaths),
 			new LuaMethod("New", _CreateAssetBundle),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -83,48 +89,112 @@ public class AssetBundleWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CreateFromMemory(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
-		AssetBundleCreateRequest o = AssetBundle.CreateFromMemory(objs0);
-		LuaScriptMgr.PushObject(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CreateFromMemoryImmediate(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
-		AssetBundle o = AssetBundle.CreateFromMemoryImmediate(objs0);
-		LuaScriptMgr.Push(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CreateFromFile(IntPtr L)
+	static int LoadFromFileAsync(IntPtr L)
 	{
 		int count = LuaDLL.lua_gettop(L);
 
 		if (count == 1)
 		{
 			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
-			AssetBundle o = AssetBundle.CreateFromFile(arg0);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromFileAsync(arg0);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromFileAsync(arg0,arg1);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromFileAsync");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadFromFile(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			AssetBundle o = AssetBundle.LoadFromFile(arg0);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
 		else if (count == 2)
 		{
 			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
-			int arg1 = (int)LuaScriptMgr.GetNumber(L, 2);
-			AssetBundle o = AssetBundle.CreateFromFile(arg0,arg1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundle o = AssetBundle.LoadFromFile(arg0,arg1);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
 		else
 		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.CreateFromFile");
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromFile");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadFromMemoryAsync(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromMemoryAsync(objs0);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromMemoryAsync(objs0,arg1);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromMemoryAsync");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadFromMemory(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			AssetBundle o = AssetBundle.LoadFromMemory(objs0);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundle o = AssetBundle.LoadFromMemory(objs0,arg1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromMemory");
 		}
 
 		return 0;
@@ -142,7 +212,7 @@ public class AssetBundleWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Load(IntPtr L)
+	static int LoadAsset(IntPtr L)
 	{
 		int count = LuaDLL.lua_gettop(L);
 
@@ -150,7 +220,7 @@ public class AssetBundleWrap
 		{
 			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
 			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
-			Object o = obj.Load(arg0);
+			Object o = obj.LoadAsset(arg0);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
@@ -159,39 +229,117 @@ public class AssetBundleWrap
 			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
 			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
 			Type arg1 = LuaScriptMgr.GetTypeObject(L, 3);
-			Object o = obj.Load(arg0,arg1);
+			Object o = obj.LoadAsset(arg0,arg1);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
 		else
 		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.Load");
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadAsset");
 		}
 
 		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int LoadAsync(IntPtr L)
+	static int LoadAssetAsync(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 3);
-		AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
-		string arg0 = LuaScriptMgr.GetLuaString(L, 2);
-		Type arg1 = LuaScriptMgr.GetTypeObject(L, 3);
-		AssetBundleRequest o = obj.LoadAsync(arg0,arg1);
-		LuaScriptMgr.PushObject(L, o);
-		return 1;
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 2)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			AssetBundleRequest o = obj.LoadAssetAsync(arg0);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 3)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			Type arg1 = LuaScriptMgr.GetTypeObject(L, 3);
+			AssetBundleRequest o = obj.LoadAssetAsync(arg0,arg1);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadAssetAsync");
+		}
+
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int LoadAll(IntPtr L)
+	static int LoadAssetWithSubAssets(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 2)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			Object[] o = obj.LoadAssetWithSubAssets(arg0);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 3)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			Type arg1 = LuaScriptMgr.GetTypeObject(L, 3);
+			Object[] o = obj.LoadAssetWithSubAssets(arg0,arg1);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadAssetWithSubAssets");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadAssetWithSubAssetsAsync(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 2)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			AssetBundleRequest o = obj.LoadAssetWithSubAssetsAsync(arg0);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 3)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			Type arg1 = LuaScriptMgr.GetTypeObject(L, 3);
+			AssetBundleRequest o = obj.LoadAssetWithSubAssetsAsync(arg0,arg1);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadAssetWithSubAssetsAsync");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadAllAssets(IntPtr L)
 	{
 		int count = LuaDLL.lua_gettop(L);
 
 		if (count == 1)
 		{
 			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
-			Object[] o = obj.LoadAll();
+			Object[] o = obj.LoadAllAssets();
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
@@ -199,13 +347,41 @@ public class AssetBundleWrap
 		{
 			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
 			Type arg0 = LuaScriptMgr.GetTypeObject(L, 2);
-			Object[] o = obj.LoadAll(arg0);
+			Object[] o = obj.LoadAllAssets(arg0);
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
 		else
 		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadAll");
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadAllAssets");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadAllAssetsAsync(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			AssetBundleRequest o = obj.LoadAllAssetsAsync();
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+			Type arg0 = LuaScriptMgr.GetTypeObject(L, 2);
+			AssetBundleRequest o = obj.LoadAllAssetsAsync(arg0);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadAllAssetsAsync");
 		}
 
 		return 0;
@@ -219,6 +395,26 @@ public class AssetBundleWrap
 		bool arg0 = LuaScriptMgr.GetBoolean(L, 2);
 		obj.Unload(arg0);
 		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetAllAssetNames(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+		string[] o = obj.GetAllAssetNames();
+		LuaScriptMgr.PushArray(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetAllScenePaths(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		AssetBundle obj = (AssetBundle)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AssetBundle");
+		string[] o = obj.GetAllScenePaths();
+		LuaScriptMgr.PushArray(L, o);
+		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

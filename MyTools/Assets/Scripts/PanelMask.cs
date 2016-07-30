@@ -42,8 +42,8 @@ public class PanelMask : MonoBehaviour
         for (int i = 0; i < particleSystems.Length; i++)
         {
 #if UNITY_EDITOR
-            //在编辑器模式下使用material，防止本地文件被修改
-            _mat = particleSystems[i].renderer.material;
+            //鍦ㄧ紪杈戝櫒妯″紡涓嬩娇鐢╩aterial锛岄槻姝㈡湰鍦版枃浠惰淇敼
+            _mat = particleSystems[i].GetComponent<Renderer>().material;
 #else
             _mat = particleSystems[i].renderer.sharedMaterial;
 #endif

@@ -16,10 +16,7 @@ public class ScreenWrap
 		LuaField[] fields = new LuaField[]
 		{
 			new LuaField("resolutions", get_resolutions, null),
-			new LuaField("GetResolution", get_GetResolution, null),
 			new LuaField("currentResolution", get_currentResolution, null),
-			new LuaField("showCursor", get_showCursor, set_showCursor),
-			new LuaField("lockCursor", get_lockCursor, set_lockCursor),
 			new LuaField("width", get_width, null),
 			new LuaField("height", get_height, null),
 			new LuaField("dpi", get_dpi, null),
@@ -71,30 +68,9 @@ public class ScreenWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_GetResolution(IntPtr L)
-	{
-		LuaScriptMgr.PushArray(L, Screen.GetResolution);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_currentResolution(IntPtr L)
 	{
 		LuaScriptMgr.PushValue(L, Screen.currentResolution);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_showCursor(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Screen.showCursor);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_lockCursor(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Screen.lockCursor);
 		return 1;
 	}
 
@@ -166,20 +142,6 @@ public class ScreenWrap
 	{
 		LuaScriptMgr.Push(L, Screen.sleepTimeout);
 		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_showCursor(IntPtr L)
-	{
-		Screen.showCursor = LuaScriptMgr.GetBoolean(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_lockCursor(IntPtr L)
-	{
-		Screen.lockCursor = LuaScriptMgr.GetBoolean(L, 3);
-		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

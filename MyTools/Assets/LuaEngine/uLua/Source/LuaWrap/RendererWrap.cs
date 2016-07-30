@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 using LuaInterface;
 using Object = UnityEngine.Object;
 
@@ -11,7 +12,7 @@ public class RendererWrap
 		{
 			new LuaMethod("SetPropertyBlock", SetPropertyBlock),
 			new LuaMethod("GetPropertyBlock", GetPropertyBlock),
-			new LuaMethod("Render", Render),
+			new LuaMethod("GetClosestReflectionProbes", GetClosestReflectionProbes),
 			new LuaMethod("New", _CreateRenderer),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -23,18 +24,21 @@ public class RendererWrap
 			new LuaField("worldToLocalMatrix", get_worldToLocalMatrix, null),
 			new LuaField("localToWorldMatrix", get_localToWorldMatrix, null),
 			new LuaField("enabled", get_enabled, set_enabled),
-			new LuaField("castShadows", get_castShadows, set_castShadows),
+			new LuaField("shadowCastingMode", get_shadowCastingMode, set_shadowCastingMode),
 			new LuaField("receiveShadows", get_receiveShadows, set_receiveShadows),
 			new LuaField("material", get_material, set_material),
 			new LuaField("sharedMaterial", get_sharedMaterial, set_sharedMaterial),
-			new LuaField("sharedMaterials", get_sharedMaterials, set_sharedMaterials),
 			new LuaField("materials", get_materials, set_materials),
+			new LuaField("sharedMaterials", get_sharedMaterials, set_sharedMaterials),
 			new LuaField("bounds", get_bounds, null),
 			new LuaField("lightmapIndex", get_lightmapIndex, set_lightmapIndex),
-			new LuaField("lightmapTilingOffset", get_lightmapTilingOffset, set_lightmapTilingOffset),
+			new LuaField("realtimeLightmapIndex", get_realtimeLightmapIndex, set_realtimeLightmapIndex),
+			new LuaField("lightmapScaleOffset", get_lightmapScaleOffset, set_lightmapScaleOffset),
+			new LuaField("realtimeLightmapScaleOffset", get_realtimeLightmapScaleOffset, set_realtimeLightmapScaleOffset),
 			new LuaField("isVisible", get_isVisible, null),
 			new LuaField("useLightProbes", get_useLightProbes, set_useLightProbes),
-			new LuaField("lightProbeAnchor", get_lightProbeAnchor, set_lightProbeAnchor),
+			new LuaField("probeAnchor", get_probeAnchor, set_probeAnchor),
+			new LuaField("reflectionProbeUsage", get_reflectionProbeUsage, set_reflectionProbeUsage),
 			new LuaField("sortingLayerName", get_sortingLayerName, set_sortingLayerName),
 			new LuaField("sortingLayerID", get_sortingLayerID, set_sortingLayerID),
 			new LuaField("sortingOrder", get_sortingOrder, set_sortingOrder),
@@ -168,7 +172,7 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_castShadows(IntPtr L)
+	static int get_shadowCastingMode(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		Renderer obj = (Renderer)o;
@@ -179,15 +183,15 @@ public class RendererWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name castShadows");
+				LuaDLL.luaL_error(L, "unknown member name shadowCastingMode");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index castShadows on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index shadowCastingMode on a nil value");
 			}
 		}
 
-		LuaScriptMgr.Push(L, obj.castShadows);
+		LuaScriptMgr.Push(L, obj.shadowCastingMode);
 		return 1;
 	}
 
@@ -264,30 +268,6 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_sharedMaterials(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Renderer obj = (Renderer)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name sharedMaterials");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index sharedMaterials on a nil value");
-			}
-		}
-
-		LuaScriptMgr.PushArray(L, obj.sharedMaterials);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_materials(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -308,6 +288,30 @@ public class RendererWrap
 		}
 
 		LuaScriptMgr.PushArray(L, obj.materials);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_sharedMaterials(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name sharedMaterials");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index sharedMaterials on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushArray(L, obj.sharedMaterials);
 		return 1;
 	}
 
@@ -360,7 +364,7 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_lightmapTilingOffset(IntPtr L)
+	static int get_realtimeLightmapIndex(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		Renderer obj = (Renderer)o;
@@ -371,15 +375,63 @@ public class RendererWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name lightmapTilingOffset");
+				LuaDLL.luaL_error(L, "unknown member name realtimeLightmapIndex");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index lightmapTilingOffset on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index realtimeLightmapIndex on a nil value");
 			}
 		}
 
-		LuaScriptMgr.Push(L, obj.lightmapTilingOffset);
+		LuaScriptMgr.Push(L, obj.realtimeLightmapIndex);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_lightmapScaleOffset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name lightmapScaleOffset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index lightmapScaleOffset on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.lightmapScaleOffset);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_realtimeLightmapScaleOffset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name realtimeLightmapScaleOffset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index realtimeLightmapScaleOffset on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.realtimeLightmapScaleOffset);
 		return 1;
 	}
 
@@ -432,7 +484,7 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_lightProbeAnchor(IntPtr L)
+	static int get_probeAnchor(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		Renderer obj = (Renderer)o;
@@ -443,15 +495,39 @@ public class RendererWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name lightProbeAnchor");
+				LuaDLL.luaL_error(L, "unknown member name probeAnchor");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index lightProbeAnchor on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index probeAnchor on a nil value");
 			}
 		}
 
-		LuaScriptMgr.Push(L, obj.lightProbeAnchor);
+		LuaScriptMgr.Push(L, obj.probeAnchor);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_reflectionProbeUsage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name reflectionProbeUsage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index reflectionProbeUsage on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.reflectionProbeUsage);
 		return 1;
 	}
 
@@ -552,7 +628,7 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_castShadows(IntPtr L)
+	static int set_shadowCastingMode(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		Renderer obj = (Renderer)o;
@@ -563,15 +639,15 @@ public class RendererWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name castShadows");
+				LuaDLL.luaL_error(L, "unknown member name shadowCastingMode");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index castShadows on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index shadowCastingMode on a nil value");
 			}
 		}
 
-		obj.castShadows = LuaScriptMgr.GetBoolean(L, 3);
+		obj.shadowCastingMode = (UnityEngine.Rendering.ShadowCastingMode)LuaScriptMgr.GetNetObject(L, 3, typeof(UnityEngine.Rendering.ShadowCastingMode));
 		return 0;
 	}
 
@@ -648,30 +724,6 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_sharedMaterials(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Renderer obj = (Renderer)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name sharedMaterials");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index sharedMaterials on a nil value");
-			}
-		}
-
-		obj.sharedMaterials = LuaScriptMgr.GetArrayObject<Material>(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_materials(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -692,6 +744,30 @@ public class RendererWrap
 		}
 
 		obj.materials = LuaScriptMgr.GetArrayObject<Material>(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_sharedMaterials(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name sharedMaterials");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index sharedMaterials on a nil value");
+			}
+		}
+
+		obj.sharedMaterials = LuaScriptMgr.GetArrayObject<Material>(L, 3);
 		return 0;
 	}
 
@@ -720,7 +796,7 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_lightmapTilingOffset(IntPtr L)
+	static int set_realtimeLightmapIndex(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		Renderer obj = (Renderer)o;
@@ -731,15 +807,63 @@ public class RendererWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name lightmapTilingOffset");
+				LuaDLL.luaL_error(L, "unknown member name realtimeLightmapIndex");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index lightmapTilingOffset on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index realtimeLightmapIndex on a nil value");
 			}
 		}
 
-		obj.lightmapTilingOffset = LuaScriptMgr.GetVector4(L, 3);
+		obj.realtimeLightmapIndex = (int)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_lightmapScaleOffset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name lightmapScaleOffset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index lightmapScaleOffset on a nil value");
+			}
+		}
+
+		obj.lightmapScaleOffset = LuaScriptMgr.GetVector4(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_realtimeLightmapScaleOffset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name realtimeLightmapScaleOffset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index realtimeLightmapScaleOffset on a nil value");
+			}
+		}
+
+		obj.realtimeLightmapScaleOffset = LuaScriptMgr.GetVector4(L, 3);
 		return 0;
 	}
 
@@ -768,7 +892,7 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_lightProbeAnchor(IntPtr L)
+	static int set_probeAnchor(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		Renderer obj = (Renderer)o;
@@ -779,15 +903,39 @@ public class RendererWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name lightProbeAnchor");
+				LuaDLL.luaL_error(L, "unknown member name probeAnchor");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index lightProbeAnchor on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index probeAnchor on a nil value");
 			}
 		}
 
-		obj.lightProbeAnchor = (Transform)LuaScriptMgr.GetUnityObject(L, 3, typeof(Transform));
+		obj.probeAnchor = (Transform)LuaScriptMgr.GetUnityObject(L, 3, typeof(Transform));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_reflectionProbeUsage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Renderer obj = (Renderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name reflectionProbeUsage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index reflectionProbeUsage on a nil value");
+			}
+		}
+
+		obj.reflectionProbeUsage = (UnityEngine.Rendering.ReflectionProbeUsage)LuaScriptMgr.GetNetObject(L, 3, typeof(UnityEngine.Rendering.ReflectionProbeUsage));
 		return 0;
 	}
 
@@ -884,12 +1032,12 @@ public class RendererWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Render(IntPtr L)
+	static int GetClosestReflectionProbes(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		Renderer obj = (Renderer)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Renderer");
-		int arg0 = (int)LuaScriptMgr.GetNumber(L, 2);
-		obj.Render(arg0);
+		List<UnityEngine.Rendering.ReflectionProbeBlendInfo> arg0 = (List<UnityEngine.Rendering.ReflectionProbeBlendInfo>)LuaScriptMgr.GetNetObject(L, 2, typeof(List<UnityEngine.Rendering.ReflectionProbeBlendInfo>));
+		obj.GetClosestReflectionProbes(arg0);
 		return 0;
 	}
 

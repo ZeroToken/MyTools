@@ -43,6 +43,8 @@ public class InputWrap
 			new LuaField("accelerationEventCount", get_accelerationEventCount, null),
 			new LuaField("touches", get_touches, null),
 			new LuaField("touchCount", get_touchCount, null),
+			new LuaField("touchPressureSupported", get_touchPressureSupported, null),
+			new LuaField("stylusTouchSupported", get_stylusTouchSupported, null),
 			new LuaField("touchSupported", get_touchSupported, null),
 			new LuaField("multiTouchEnabled", get_multiTouchEnabled, set_multiTouchEnabled),
 			new LuaField("location", get_location, null),
@@ -52,6 +54,7 @@ public class InputWrap
 			new LuaField("compositionString", get_compositionString, null),
 			new LuaField("imeIsSelected", get_imeIsSelected, null),
 			new LuaField("compositionCursorPos", get_compositionCursorPos, set_compositionCursorPos),
+			new LuaField("backButtonLeavesApp", get_backButtonLeavesApp, set_backButtonLeavesApp),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.Input", typeof(Input), regs, fields, typeof(object));
@@ -184,6 +187,20 @@ public class InputWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_touchPressureSupported(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Input.touchPressureSupported);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_stylusTouchSupported(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Input.stylusTouchSupported);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_touchSupported(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, Input.touchSupported);
@@ -247,6 +264,13 @@ public class InputWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_backButtonLeavesApp(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Input.backButtonLeavesApp);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_compensateSensors(IntPtr L)
 	{
 		Input.compensateSensors = LuaScriptMgr.GetBoolean(L, 3);
@@ -278,6 +302,13 @@ public class InputWrap
 	static int set_compositionCursorPos(IntPtr L)
 	{
 		Input.compositionCursorPos = LuaScriptMgr.GetVector2(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_backButtonLeavesApp(IntPtr L)
+	{
+		Input.backButtonLeavesApp = LuaScriptMgr.GetBoolean(L, 3);
 		return 0;
 	}
 

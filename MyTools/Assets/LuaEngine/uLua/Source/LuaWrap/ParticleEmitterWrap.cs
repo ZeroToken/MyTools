@@ -45,19 +45,7 @@ public class ParticleEmitterWrap
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int _CreateParticleEmitter(IntPtr L)
 	{
-		int count = LuaDLL.lua_gettop(L);
-
-		if (count == 0)
-		{
-			ParticleEmitter obj = new ParticleEmitter();
-			LuaScriptMgr.Push(L, obj);
-			return 1;
-		}
-		else
-		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: ParticleEmitter.New");
-		}
-
+		LuaDLL.luaL_error(L, "ParticleEmitter class does not have a constructor function");
 		return 0;
 	}
 

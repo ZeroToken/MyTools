@@ -16,7 +16,6 @@ public class WWWWrap
 			new LuaMethod("GetAudioClip", GetAudioClip),
 			new LuaMethod("GetAudioClipCompressed", GetAudioClipCompressed),
 			new LuaMethod("LoadImageIntoTexture", LoadImageIntoTexture),
-			new LuaMethod("LoadUnityWeb", LoadUnityWeb),
 			new LuaMethod("LoadFromCacheOrDownload", LoadFromCacheOrDownload),
 			new LuaMethod("New", _CreateWWW),
 			new LuaMethod("GetClassType", GetClassType),
@@ -647,32 +646,40 @@ public class WWWWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int LoadUnityWeb(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		WWW obj = (WWW)LuaScriptMgr.GetNetObjectSelf(L, 1, "WWW");
-		obj.LoadUnityWeb();
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int LoadFromCacheOrDownload(IntPtr L)
 	{
 		int count = LuaDLL.lua_gettop(L);
 
-		if (count == 2)
+		if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(string), typeof(Hash128)))
 		{
-			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
-			int arg1 = (int)LuaScriptMgr.GetNumber(L, 2);
+			string arg0 = LuaScriptMgr.GetString(L, 1);
+			Hash128 arg1 = (Hash128)LuaScriptMgr.GetLuaObject(L, 2);
 			WWW o = WWW.LoadFromCacheOrDownload(arg0,arg1);
 			LuaScriptMgr.PushObject(L, o);
 			return 1;
 		}
-		else if (count == 3)
+		else if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(string), typeof(int)))
 		{
-			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
-			int arg1 = (int)LuaScriptMgr.GetNumber(L, 2);
-			uint arg2 = (uint)LuaScriptMgr.GetNumber(L, 3);
+			string arg0 = LuaScriptMgr.GetString(L, 1);
+			int arg1 = (int)LuaDLL.lua_tonumber(L, 2);
+			WWW o = WWW.LoadFromCacheOrDownload(arg0,arg1);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(string), typeof(Hash128), typeof(uint)))
+		{
+			string arg0 = LuaScriptMgr.GetString(L, 1);
+			Hash128 arg1 = (Hash128)LuaScriptMgr.GetLuaObject(L, 2);
+			uint arg2 = (uint)LuaDLL.lua_tonumber(L, 3);
+			WWW o = WWW.LoadFromCacheOrDownload(arg0,arg1,arg2);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(string), typeof(int), typeof(uint)))
+		{
+			string arg0 = LuaScriptMgr.GetString(L, 1);
+			int arg1 = (int)LuaDLL.lua_tonumber(L, 2);
+			uint arg2 = (uint)LuaDLL.lua_tonumber(L, 3);
 			WWW o = WWW.LoadFromCacheOrDownload(arg0,arg1,arg2);
 			LuaScriptMgr.PushObject(L, o);
 			return 1;

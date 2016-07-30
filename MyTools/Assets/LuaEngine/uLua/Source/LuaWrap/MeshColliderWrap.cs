@@ -18,7 +18,6 @@ public class MeshColliderWrap
 		{
 			new LuaField("sharedMesh", get_sharedMesh, set_sharedMesh),
 			new LuaField("convex", get_convex, set_convex),
-			new LuaField("smoothSphereCollisions", get_smoothSphereCollisions, set_smoothSphereCollisions),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.MeshCollider", typeof(MeshCollider), regs, fields, typeof(Collider));
@@ -101,30 +100,6 @@ public class MeshColliderWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_smoothSphereCollisions(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		MeshCollider obj = (MeshCollider)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name smoothSphereCollisions");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index smoothSphereCollisions on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.smoothSphereCollisions);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_sharedMesh(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -169,30 +144,6 @@ public class MeshColliderWrap
 		}
 
 		obj.convex = LuaScriptMgr.GetBoolean(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_smoothSphereCollisions(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		MeshCollider obj = (MeshCollider)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name smoothSphereCollisions");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index smoothSphereCollisions on a nil value");
-			}
-		}
-
-		obj.smoothSphereCollisions = LuaScriptMgr.GetBoolean(L, 3);
 		return 0;
 	}
 

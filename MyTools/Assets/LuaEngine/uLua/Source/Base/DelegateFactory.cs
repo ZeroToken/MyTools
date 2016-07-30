@@ -17,9 +17,11 @@ public static class DelegateFactory
 		dict.Add(typeof(System.Reflection.MemberFilter), new DelegateValue(System_Reflection_MemberFilter));
 		dict.Add(typeof(System.Reflection.TypeFilter), new DelegateValue(System_Reflection_TypeFilter));
 		dict.Add(typeof(TestLuaDelegate.VoidDelegate), new DelegateValue(TestLuaDelegate_VoidDelegate));
+		dict.Add(typeof(Camera.CameraCallback), new DelegateValue(Camera_CameraCallback));
 		dict.Add(typeof(AudioClip.PCMReaderCallback), new DelegateValue(AudioClip_PCMReaderCallback));
 		dict.Add(typeof(AudioClip.PCMSetPositionCallback), new DelegateValue(AudioClip_PCMSetPositionCallback));
 		dict.Add(typeof(Application.LogCallback), new DelegateValue(Application_LogCallback));
+		dict.Add(typeof(Application.AdvertisingIdentifierCallback), new DelegateValue(Application_AdvertisingIdentifierCallback));
 	}
 
 	[NoToLuaAttribute]
@@ -111,6 +113,19 @@ public static class DelegateFactory
 		return d;
 	}
 
+	public static Delegate Camera_CameraCallback(LuaFunction func)
+	{
+		Camera.CameraCallback d = (param0) =>
+		{
+			int top = func.BeginPCall();
+			IntPtr L = func.GetLuaState();
+			LuaScriptMgr.Push(L, param0);
+			func.PCall(top, 1);
+			func.EndPCall(top);
+		};
+		return d;
+	}
+
 	public static Delegate AudioClip_PCMReaderCallback(LuaFunction func)
 	{
 		AudioClip.PCMReaderCallback d = (param0) =>
@@ -140,6 +155,21 @@ public static class DelegateFactory
 	public static Delegate Application_LogCallback(LuaFunction func)
 	{
 		Application.LogCallback d = (param0, param1, param2) =>
+		{
+			int top = func.BeginPCall();
+			IntPtr L = func.GetLuaState();
+			LuaScriptMgr.Push(L, param0);
+			LuaScriptMgr.Push(L, param1);
+			LuaScriptMgr.Push(L, param2);
+			func.PCall(top, 3);
+			func.EndPCall(top);
+		};
+		return d;
+	}
+
+	public static Delegate Application_AdvertisingIdentifierCallback(LuaFunction func)
+	{
+		Application.AdvertisingIdentifierCallback d = (param0, param1, param2) =>
 		{
 			int top = func.BeginPCall();
 			IntPtr L = func.GetLuaState();

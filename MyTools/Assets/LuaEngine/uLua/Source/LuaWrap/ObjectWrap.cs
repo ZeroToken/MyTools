@@ -9,14 +9,14 @@ public class ObjectWrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
+			new LuaMethod("FindObjectsOfType", FindObjectsOfType),
+			new LuaMethod("DontDestroyOnLoad", DontDestroyOnLoad),
+			new LuaMethod("ToString", ToString),
 			new LuaMethod("Equals", Equals),
 			new LuaMethod("GetHashCode", GetHashCode),
 			new LuaMethod("GetInstanceID", GetInstanceID),
 			new LuaMethod("Instantiate", Instantiate),
-			new LuaMethod("FindObjectsOfType", FindObjectsOfType),
 			new LuaMethod("FindObjectOfType", FindObjectOfType),
-			new LuaMethod("DontDestroyOnLoad", DontDestroyOnLoad),
-			new LuaMethod("ToString", ToString),
 			new LuaMethod("DestroyObject", DestroyObject),
 			new LuaMethod("DestroyImmediate", DestroyImmediate),
 			new LuaMethod("Destroy", Destroy),
@@ -177,6 +177,35 @@ public class ObjectWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int FindObjectsOfType(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Type arg0 = LuaScriptMgr.GetTypeObject(L, 1);
+		Object[] o = Object.FindObjectsOfType(arg0);
+		LuaScriptMgr.PushArray(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int DontDestroyOnLoad(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Object arg0 = (Object)LuaScriptMgr.GetUnityObject(L, 1, typeof(Object));
+		Object.DontDestroyOnLoad(arg0);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ToString(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Object obj = (Object)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Object");
+		string o = obj.ToString();
+		LuaScriptMgr.Push(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int Equals(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
@@ -237,40 +266,11 @@ public class ObjectWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int FindObjectsOfType(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		Type arg0 = LuaScriptMgr.GetTypeObject(L, 1);
-		Object[] o = Object.FindObjectsOfType(arg0);
-		LuaScriptMgr.PushArray(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int FindObjectOfType(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		Type arg0 = LuaScriptMgr.GetTypeObject(L, 1);
 		Object o = Object.FindObjectOfType(arg0);
-		LuaScriptMgr.Push(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int DontDestroyOnLoad(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		Object arg0 = (Object)LuaScriptMgr.GetUnityObject(L, 1, typeof(Object));
-		Object.DontDestroyOnLoad(arg0);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int ToString(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		Object obj = (Object)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Object");
-		string o = obj.ToString();
 		LuaScriptMgr.Push(L, o);
 		return 1;
 	}

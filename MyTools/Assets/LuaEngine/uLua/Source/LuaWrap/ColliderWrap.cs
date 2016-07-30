@@ -21,6 +21,7 @@ public class ColliderWrap
 			new LuaField("enabled", get_enabled, set_enabled),
 			new LuaField("attachedRigidbody", get_attachedRigidbody, null),
 			new LuaField("isTrigger", get_isTrigger, set_isTrigger),
+			new LuaField("contactOffset", get_contactOffset, set_contactOffset),
 			new LuaField("material", get_material, set_material),
 			new LuaField("sharedMaterial", get_sharedMaterial, set_sharedMaterial),
 			new LuaField("bounds", get_bounds, null),
@@ -126,6 +127,30 @@ public class ColliderWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.isTrigger);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_contactOffset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Collider obj = (Collider)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name contactOffset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index contactOffset on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.contactOffset);
 		return 1;
 	}
 
@@ -246,6 +271,30 @@ public class ColliderWrap
 		}
 
 		obj.isTrigger = LuaScriptMgr.GetBoolean(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_contactOffset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Collider obj = (Collider)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name contactOffset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index contactOffset on a nil value");
+			}
+		}
+
+		obj.contactOffset = (float)LuaScriptMgr.GetNumber(L, 3);
 		return 0;
 	}
 

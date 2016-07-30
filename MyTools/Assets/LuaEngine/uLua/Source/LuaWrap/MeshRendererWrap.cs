@@ -16,6 +16,7 @@ public class MeshRendererWrap
 
 		LuaField[] fields = new LuaField[]
 		{
+			new LuaField("additionalVertexStreams", get_additionalVertexStreams, set_additionalVertexStreams),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.MeshRenderer", typeof(MeshRenderer), regs, fields, typeof(Renderer));
@@ -47,6 +48,54 @@ public class MeshRendererWrap
 	{
 		LuaScriptMgr.Push(L, classType);
 		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_additionalVertexStreams(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MeshRenderer obj = (MeshRenderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name additionalVertexStreams");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index additionalVertexStreams on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.additionalVertexStreams);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_additionalVertexStreams(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MeshRenderer obj = (MeshRenderer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name additionalVertexStreams");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index additionalVertexStreams on a nil value");
+			}
+		}
+
+		obj.additionalVertexStreams = (Mesh)LuaScriptMgr.GetUnityObject(L, 3, typeof(Mesh));
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

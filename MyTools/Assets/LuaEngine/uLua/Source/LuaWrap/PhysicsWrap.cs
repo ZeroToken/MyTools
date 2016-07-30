@@ -10,14 +10,24 @@ public class PhysicsWrap
 		{
 			new LuaMethod("Raycast", Raycast),
 			new LuaMethod("RaycastAll", RaycastAll),
+			new LuaMethod("RaycastNonAlloc", RaycastNonAlloc),
 			new LuaMethod("Linecast", Linecast),
 			new LuaMethod("OverlapSphere", OverlapSphere),
+			new LuaMethod("OverlapSphereNonAlloc", OverlapSphereNonAlloc),
 			new LuaMethod("CapsuleCast", CapsuleCast),
 			new LuaMethod("SphereCast", SphereCast),
 			new LuaMethod("CapsuleCastAll", CapsuleCastAll),
+			new LuaMethod("CapsuleCastNonAlloc", CapsuleCastNonAlloc),
 			new LuaMethod("SphereCastAll", SphereCastAll),
+			new LuaMethod("SphereCastNonAlloc", SphereCastNonAlloc),
 			new LuaMethod("CheckSphere", CheckSphere),
 			new LuaMethod("CheckCapsule", CheckCapsule),
+			new LuaMethod("CheckBox", CheckBox),
+			new LuaMethod("OverlapBox", OverlapBox),
+			new LuaMethod("OverlapBoxNonAlloc", OverlapBoxNonAlloc),
+			new LuaMethod("BoxCastAll", BoxCastAll),
+			new LuaMethod("BoxCastNonAlloc", BoxCastNonAlloc),
+			new LuaMethod("BoxCast", BoxCast),
 			new LuaMethod("IgnoreCollision", IgnoreCollision),
 			new LuaMethod("IgnoreLayerCollision", IgnoreLayerCollision),
 			new LuaMethod("GetIgnoreLayerCollision", GetIgnoreLayerCollision),
@@ -27,19 +37,15 @@ public class PhysicsWrap
 
 		LuaField[] fields = new LuaField[]
 		{
-			new LuaField("kIgnoreRaycastLayer", get_kIgnoreRaycastLayer, null),
-			new LuaField("kDefaultRaycastLayers", get_kDefaultRaycastLayers, null),
-			new LuaField("kAllLayers", get_kAllLayers, null),
 			new LuaField("IgnoreRaycastLayer", get_IgnoreRaycastLayer, null),
 			new LuaField("DefaultRaycastLayers", get_DefaultRaycastLayers, null),
 			new LuaField("AllLayers", get_AllLayers, null),
 			new LuaField("gravity", get_gravity, set_gravity),
-			new LuaField("minPenetrationForPenalty", get_minPenetrationForPenalty, set_minPenetrationForPenalty),
+			new LuaField("defaultContactOffset", get_defaultContactOffset, set_defaultContactOffset),
 			new LuaField("bounceThreshold", get_bounceThreshold, set_bounceThreshold),
-			new LuaField("sleepVelocity", get_sleepVelocity, set_sleepVelocity),
-			new LuaField("sleepAngularVelocity", get_sleepAngularVelocity, set_sleepAngularVelocity),
-			new LuaField("maxAngularVelocity", get_maxAngularVelocity, set_maxAngularVelocity),
 			new LuaField("solverIterationCount", get_solverIterationCount, set_solverIterationCount),
+			new LuaField("sleepThreshold", get_sleepThreshold, set_sleepThreshold),
+			new LuaField("queriesHitTriggers", get_queriesHitTriggers, set_queriesHitTriggers),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.Physics", typeof(Physics), regs, fields, typeof(object));
@@ -74,27 +80,6 @@ public class PhysicsWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_kIgnoreRaycastLayer(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Physics.kIgnoreRaycastLayer);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_kDefaultRaycastLayers(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Physics.kDefaultRaycastLayers);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_kAllLayers(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Physics.kAllLayers);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_IgnoreRaycastLayer(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, Physics.IgnoreRaycastLayer);
@@ -123,9 +108,9 @@ public class PhysicsWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_minPenetrationForPenalty(IntPtr L)
+	static int get_defaultContactOffset(IntPtr L)
 	{
-		LuaScriptMgr.Push(L, Physics.minPenetrationForPenalty);
+		LuaScriptMgr.Push(L, Physics.defaultContactOffset);
 		return 1;
 	}
 
@@ -137,30 +122,23 @@ public class PhysicsWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_sleepVelocity(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Physics.sleepVelocity);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_sleepAngularVelocity(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Physics.sleepAngularVelocity);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_maxAngularVelocity(IntPtr L)
-	{
-		LuaScriptMgr.Push(L, Physics.maxAngularVelocity);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_solverIterationCount(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, Physics.solverIterationCount);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_sleepThreshold(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Physics.sleepThreshold);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_queriesHitTriggers(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Physics.queriesHitTriggers);
 		return 1;
 	}
 
@@ -172,9 +150,9 @@ public class PhysicsWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_minPenetrationForPenalty(IntPtr L)
+	static int set_defaultContactOffset(IntPtr L)
 	{
-		Physics.minPenetrationForPenalty = (float)LuaScriptMgr.GetNumber(L, 3);
+		Physics.defaultContactOffset = (float)LuaScriptMgr.GetNumber(L, 3);
 		return 0;
 	}
 
@@ -186,30 +164,23 @@ public class PhysicsWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_sleepVelocity(IntPtr L)
-	{
-		Physics.sleepVelocity = (float)LuaScriptMgr.GetNumber(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_sleepAngularVelocity(IntPtr L)
-	{
-		Physics.sleepAngularVelocity = (float)LuaScriptMgr.GetNumber(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_maxAngularVelocity(IntPtr L)
-	{
-		Physics.maxAngularVelocity = (float)LuaScriptMgr.GetNumber(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_solverIterationCount(IntPtr L)
 	{
 		Physics.solverIterationCount = (int)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_sleepThreshold(IntPtr L)
+	{
+		Physics.sleepThreshold = (float)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_queriesHitTriggers(IntPtr L)
+	{
+		Physics.queriesHitTriggers = LuaScriptMgr.GetBoolean(L, 3);
 		return 0;
 	}
 
@@ -222,14 +193,6 @@ public class PhysicsWrap
 		{
 			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
 			bool o = Physics.Raycast(arg0);
-			LuaScriptMgr.Push(L, o);
-			return 1;
-		}
-		else if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float)))
-		{
-			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
-			bool o = Physics.Raycast(arg0,arg1);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
@@ -250,6 +213,14 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
+		else if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			bool o = Physics.Raycast(arg0,arg1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
 		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(int)))
 		{
 			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
@@ -258,6 +229,16 @@ public class PhysicsWrap
 			bool o = Physics.Raycast(arg0,arg1,arg2);
 			LuaScriptMgr.Push(L, o);
 			return 1;
+		}
+		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), null))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			RaycastHit arg2;
+			bool o = Physics.Raycast(arg0,arg1,out arg2);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg2);
+			return 2;
 		}
 		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(float)))
 		{
@@ -278,15 +259,15 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, arg1);
 			return 2;
 		}
-		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), null))
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
 		{
-			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
-			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
-			RaycastHit arg2;
-			bool o = Physics.Raycast(arg0,arg1,out arg2);
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			int arg2 = (int)LuaDLL.lua_tonumber(L, 3);
+			QueryTriggerInteraction arg3 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 4);
+			bool o = Physics.Raycast(arg0,arg1,arg2,arg3);
 			LuaScriptMgr.Push(L, o);
-			LuaScriptMgr.Push(L, arg2);
-			return 2;
+			return 1;
 		}
 		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(float), typeof(int)))
 		{
@@ -320,14 +301,50 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, arg1);
 			return 2;
 		}
-		else if (count == 5)
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 5);
+			bool o = Physics.Raycast(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), null, typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			RaycastHit arg2;
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int arg4 = (int)LuaDLL.lua_tonumber(L, 5);
+			bool o = Physics.Raycast(arg0,arg1,out arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg2);
+			return 2;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), null, typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			RaycastHit arg1;
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 5);
+			bool o = Physics.Raycast(arg0,out arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg1);
+			return 2;
+		}
+		else if (count == 6)
 		{
 			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
 			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
 			RaycastHit arg2;
 			float arg3 = (float)LuaScriptMgr.GetNumber(L, 4);
 			int arg4 = (int)LuaScriptMgr.GetNumber(L, 5);
-			bool o = Physics.Raycast(arg0,arg1,out arg2,arg3,arg4);
+			QueryTriggerInteraction arg5 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 6, typeof(QueryTriggerInteraction));
+			bool o = Physics.Raycast(arg0,arg1,out arg2,arg3,arg4,arg5);
 			LuaScriptMgr.Push(L, o);
 			LuaScriptMgr.Push(L, arg2);
 			return 2;
@@ -386,19 +403,133 @@ public class PhysicsWrap
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
-		else if (count == 4)
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			RaycastHit[] o = Physics.RaycastAll(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			int arg2 = (int)LuaDLL.lua_tonumber(L, 3);
+			QueryTriggerInteraction arg3 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 4);
+			RaycastHit[] o = Physics.RaycastAll(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 5)
 		{
 			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
 			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
 			float arg2 = (float)LuaScriptMgr.GetNumber(L, 3);
 			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
-			RaycastHit[] o = Physics.RaycastAll(arg0,arg1,arg2,arg3);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 5, typeof(QueryTriggerInteraction));
+			RaycastHit[] o = Physics.RaycastAll(arg0,arg1,arg2,arg3,arg4);
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.RaycastAll");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int RaycastNonAlloc(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 2)
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			RaycastHit[] objs1 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 2);
+			int o = Physics.RaycastNonAlloc(arg0,objs1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(RaycastHit[])))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			int o = Physics.RaycastNonAlloc(arg0,arg1,objs2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(RaycastHit[]), typeof(float)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			RaycastHit[] objs1 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int o = Physics.RaycastNonAlloc(arg0,objs1,arg2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(RaycastHit[]), typeof(float)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int o = Physics.RaycastNonAlloc(arg0,arg1,objs2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(RaycastHit[]), typeof(float), typeof(int)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			RaycastHit[] objs1 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			int o = Physics.RaycastNonAlloc(arg0,objs1,arg2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(RaycastHit[]), typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int arg4 = (int)LuaDLL.lua_tonumber(L, 5);
+			int o = Physics.RaycastNonAlloc(arg0,arg1,objs2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(RaycastHit[]), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			RaycastHit[] objs1 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 5);
+			int o = Physics.RaycastNonAlloc(arg0,objs1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 6)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			float arg3 = (float)LuaScriptMgr.GetNumber(L, 4);
+			int arg4 = (int)LuaScriptMgr.GetNumber(L, 5);
+			QueryTriggerInteraction arg5 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 6, typeof(QueryTriggerInteraction));
+			int o = Physics.RaycastNonAlloc(arg0,arg1,objs2,arg3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.RaycastNonAlloc");
 		}
 
 		return 0;
@@ -436,13 +567,35 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
-		else if (count == 4)
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), null, typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			RaycastHit arg2;
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			bool o = Physics.Linecast(arg0,arg1,out arg2,arg3);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg2);
+			return 2;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			int arg2 = (int)LuaDLL.lua_tonumber(L, 3);
+			QueryTriggerInteraction arg3 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 4);
+			bool o = Physics.Linecast(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5)
 		{
 			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
 			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
 			RaycastHit arg2;
 			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
-			bool o = Physics.Linecast(arg0,arg1,out arg2,arg3);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 5, typeof(QueryTriggerInteraction));
+			bool o = Physics.Linecast(arg0,arg1,out arg2,arg3,arg4);
 			LuaScriptMgr.Push(L, o);
 			LuaScriptMgr.Push(L, arg2);
 			return 2;
@@ -477,9 +630,62 @@ public class PhysicsWrap
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
+		else if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
+			int arg2 = (int)LuaScriptMgr.GetNumber(L, 3);
+			QueryTriggerInteraction arg3 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 4, typeof(QueryTriggerInteraction));
+			Collider[] o = Physics.OverlapSphere(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.OverlapSphere");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OverlapSphereNonAlloc(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 3)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
+			Collider[] objs2 = LuaScriptMgr.GetArrayObject<Collider>(L, 3);
+			int o = Physics.OverlapSphereNonAlloc(arg0,arg1,objs2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
+			Collider[] objs2 = LuaScriptMgr.GetArrayObject<Collider>(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			int o = Physics.OverlapSphereNonAlloc(arg0,arg1,objs2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
+			Collider[] objs2 = LuaScriptMgr.GetArrayObject<Collider>(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 5, typeof(QueryTriggerInteraction));
+			int o = Physics.OverlapSphereNonAlloc(arg0,arg1,objs2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.OverlapSphereNonAlloc");
 		}
 
 		return 0;
@@ -548,7 +754,34 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
-		else if (count == 7)
+		else if (count == 7 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(float), typeof(LuaTable), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			Vector3 arg3 = LuaScriptMgr.GetVector3(L, 4);
+			float arg4 = (float)LuaDLL.lua_tonumber(L, 5);
+			int arg5 = (int)LuaDLL.lua_tonumber(L, 6);
+			QueryTriggerInteraction arg6 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 7);
+			bool o = Physics.CapsuleCast(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 7 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(float), typeof(LuaTable), null, typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			Vector3 arg3 = LuaScriptMgr.GetVector3(L, 4);
+			RaycastHit arg4;
+			float arg5 = (float)LuaDLL.lua_tonumber(L, 6);
+			int arg6 = (int)LuaDLL.lua_tonumber(L, 7);
+			bool o = Physics.CapsuleCast(arg0,arg1,arg2,arg3,out arg4,arg5,arg6);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg4);
+			return 2;
+		}
+		else if (count == 8)
 		{
 			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
 			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
@@ -557,7 +790,8 @@ public class PhysicsWrap
 			RaycastHit arg4;
 			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
 			int arg6 = (int)LuaScriptMgr.GetNumber(L, 7);
-			bool o = Physics.CapsuleCast(arg0,arg1,arg2,arg3,out arg4,arg5,arg6);
+			QueryTriggerInteraction arg7 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 8, typeof(QueryTriggerInteraction));
+			bool o = Physics.CapsuleCast(arg0,arg1,arg2,arg3,out arg4,arg5,arg6,arg7);
 			LuaScriptMgr.Push(L, o);
 			LuaScriptMgr.Push(L, arg4);
 			return 2;
@@ -602,6 +836,17 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, arg2);
 			return 2;
 		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), null))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit arg3;
+			bool o = Physics.SphereCast(arg0,arg1,arg2,out arg3);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg3);
+			return 2;
+		}
 		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(float), typeof(int)))
 		{
 			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
@@ -623,17 +868,6 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, arg2);
 			return 2;
 		}
-		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), null))
-		{
-			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
-			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
-			RaycastHit arg3;
-			bool o = Physics.SphereCast(arg0,arg1,arg2,out arg3);
-			LuaScriptMgr.Push(L, o);
-			LuaScriptMgr.Push(L, arg3);
-			return 2;
-		}
 		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), null, typeof(float), typeof(int)))
 		{
 			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
@@ -645,6 +879,17 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, o);
 			LuaScriptMgr.Push(L, arg2);
 			return 2;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 5);
+			bool o = Physics.SphereCast(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
 		}
 		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), null, typeof(float)))
 		{
@@ -658,7 +903,33 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, arg3);
 			return 2;
 		}
-		else if (count == 6)
+		else if (count == 6 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), null, typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit arg3;
+			float arg4 = (float)LuaDLL.lua_tonumber(L, 5);
+			int arg5 = (int)LuaDLL.lua_tonumber(L, 6);
+			bool o = Physics.SphereCast(arg0,arg1,arg2,out arg3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg3);
+			return 2;
+		}
+		else if (count == 6 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), null, typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			RaycastHit arg2;
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int arg4 = (int)LuaDLL.lua_tonumber(L, 5);
+			QueryTriggerInteraction arg5 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 6);
+			bool o = Physics.SphereCast(arg0,arg1,out arg2,arg3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg2);
+			return 2;
+		}
+		else if (count == 7)
 		{
 			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
 			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
@@ -666,7 +937,8 @@ public class PhysicsWrap
 			RaycastHit arg3;
 			float arg4 = (float)LuaScriptMgr.GetNumber(L, 5);
 			int arg5 = (int)LuaScriptMgr.GetNumber(L, 6);
-			bool o = Physics.SphereCast(arg0,arg1,arg2,out arg3,arg4,arg5);
+			QueryTriggerInteraction arg6 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 7, typeof(QueryTriggerInteraction));
+			bool o = Physics.SphereCast(arg0,arg1,arg2,out arg3,arg4,arg5,arg6);
 			LuaScriptMgr.Push(L, o);
 			LuaScriptMgr.Push(L, arg3);
 			return 2;
@@ -717,9 +989,85 @@ public class PhysicsWrap
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
+		else if (count == 7)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 3);
+			Vector3 arg3 = LuaScriptMgr.GetVector3(L, 4);
+			float arg4 = (float)LuaScriptMgr.GetNumber(L, 5);
+			int arg5 = (int)LuaScriptMgr.GetNumber(L, 6);
+			QueryTriggerInteraction arg6 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 7, typeof(QueryTriggerInteraction));
+			RaycastHit[] o = Physics.CapsuleCastAll(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.CapsuleCastAll");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int CapsuleCastNonAlloc(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 3);
+			Vector3 arg3 = LuaScriptMgr.GetVector3(L, 4);
+			RaycastHit[] objs4 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 5);
+			int o = Physics.CapsuleCastNonAlloc(arg0,arg1,arg2,arg3,objs4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 6)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 3);
+			Vector3 arg3 = LuaScriptMgr.GetVector3(L, 4);
+			RaycastHit[] objs4 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 5);
+			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
+			int o = Physics.CapsuleCastNonAlloc(arg0,arg1,arg2,arg3,objs4,arg5);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 7)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 3);
+			Vector3 arg3 = LuaScriptMgr.GetVector3(L, 4);
+			RaycastHit[] objs4 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 5);
+			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
+			int arg6 = (int)LuaScriptMgr.GetNumber(L, 7);
+			int o = Physics.CapsuleCastNonAlloc(arg0,arg1,arg2,arg3,objs4,arg5,arg6);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 8)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 3);
+			Vector3 arg3 = LuaScriptMgr.GetVector3(L, 4);
+			RaycastHit[] objs4 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 5);
+			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
+			int arg6 = (int)LuaScriptMgr.GetNumber(L, 7);
+			QueryTriggerInteraction arg7 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 8, typeof(QueryTriggerInteraction));
+			int o = Physics.CapsuleCastNonAlloc(arg0,arg1,arg2,arg3,objs4,arg5,arg6,arg7);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.CapsuleCastNonAlloc");
 		}
 
 		return 0;
@@ -756,16 +1104,6 @@ public class PhysicsWrap
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
-		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), typeof(float)))
-		{
-			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
-			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
-			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
-			RaycastHit[] o = Physics.SphereCastAll(arg0,arg1,arg2,arg3);
-			LuaScriptMgr.PushArray(L, o);
-			return 1;
-		}
 		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(float), typeof(int)))
 		{
 			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
@@ -776,20 +1114,154 @@ public class PhysicsWrap
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
-		else if (count == 5)
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), typeof(float)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			RaycastHit[] o = Physics.SphereCastAll(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int arg4 = (int)LuaDLL.lua_tonumber(L, 5);
+			RaycastHit[] o = Physics.SphereCastAll(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 3);
+			int arg3 = (int)LuaDLL.lua_tonumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 5);
+			RaycastHit[] o = Physics.SphereCastAll(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 6)
 		{
 			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
 			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
 			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
 			float arg3 = (float)LuaScriptMgr.GetNumber(L, 4);
 			int arg4 = (int)LuaScriptMgr.GetNumber(L, 5);
-			RaycastHit[] o = Physics.SphereCastAll(arg0,arg1,arg2,arg3,arg4);
+			QueryTriggerInteraction arg5 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 6, typeof(QueryTriggerInteraction));
+			RaycastHit[] o = Physics.SphereCastAll(arg0,arg1,arg2,arg3,arg4,arg5);
 			LuaScriptMgr.PushArray(L, o);
 			return 1;
 		}
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.SphereCastAll");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SphereCastNonAlloc(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 3)
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,objs2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(RaycastHit[]), typeof(float)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,objs2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), typeof(RaycastHit[])))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,arg2,objs3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(RaycastHit[]), typeof(float), typeof(int)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int arg4 = (int)LuaDLL.lua_tonumber(L, 5);
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,objs2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), typeof(RaycastHit[]), typeof(float)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			float arg4 = (float)LuaDLL.lua_tonumber(L, 5);
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,arg2,objs3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 6 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(LuaTable), typeof(RaycastHit[]), typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			float arg4 = (float)LuaDLL.lua_tonumber(L, 5);
+			int arg5 = (int)LuaDLL.lua_tonumber(L, 6);
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,arg2,objs3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 6 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(float), typeof(RaycastHit[]), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Ray arg0 = LuaScriptMgr.GetRay(L, 1);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 2);
+			RaycastHit[] objs2 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 3);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 4);
+			int arg4 = (int)LuaDLL.lua_tonumber(L, 5);
+			QueryTriggerInteraction arg5 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 6);
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,objs2,arg3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 7)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			float arg4 = (float)LuaScriptMgr.GetNumber(L, 5);
+			int arg5 = (int)LuaScriptMgr.GetNumber(L, 6);
+			QueryTriggerInteraction arg6 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 7, typeof(QueryTriggerInteraction));
+			int o = Physics.SphereCastNonAlloc(arg0,arg1,arg2,objs3,arg4,arg5,arg6);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.SphereCastNonAlloc");
 		}
 
 		return 0;
@@ -814,6 +1286,16 @@ public class PhysicsWrap
 			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
 			int arg2 = (int)LuaScriptMgr.GetNumber(L, 3);
 			bool o = Physics.CheckSphere(arg0,arg1,arg2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 2);
+			int arg2 = (int)LuaScriptMgr.GetNumber(L, 3);
+			QueryTriggerInteraction arg3 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 4, typeof(QueryTriggerInteraction));
+			bool o = Physics.CheckSphere(arg0,arg1,arg2,arg3);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
@@ -849,9 +1331,451 @@ public class PhysicsWrap
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
+		else if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 5, typeof(QueryTriggerInteraction));
+			bool o = Physics.CheckCapsule(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.CheckCapsule");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int CheckBox(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 2)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			bool o = Physics.CheckBox(arg0,arg1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 3)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Quaternion arg2 = LuaScriptMgr.GetQuaternion(L, 3);
+			bool o = Physics.CheckBox(arg0,arg1,arg2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Quaternion arg2 = LuaScriptMgr.GetQuaternion(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			bool o = Physics.CheckBox(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Quaternion arg2 = LuaScriptMgr.GetQuaternion(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 5, typeof(QueryTriggerInteraction));
+			bool o = Physics.CheckBox(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.CheckBox");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OverlapBox(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 2)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Collider[] o = Physics.OverlapBox(arg0,arg1);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 3)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Quaternion arg2 = LuaScriptMgr.GetQuaternion(L, 3);
+			Collider[] o = Physics.OverlapBox(arg0,arg1,arg2);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Quaternion arg2 = LuaScriptMgr.GetQuaternion(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			Collider[] o = Physics.OverlapBox(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Quaternion arg2 = LuaScriptMgr.GetQuaternion(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			QueryTriggerInteraction arg4 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 5, typeof(QueryTriggerInteraction));
+			Collider[] o = Physics.OverlapBox(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.OverlapBox");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OverlapBoxNonAlloc(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 3)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Collider[] objs2 = LuaScriptMgr.GetArrayObject<Collider>(L, 3);
+			int o = Physics.OverlapBoxNonAlloc(arg0,arg1,objs2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Collider[] objs2 = LuaScriptMgr.GetArrayObject<Collider>(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			int o = Physics.OverlapBoxNonAlloc(arg0,arg1,objs2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Collider[] objs2 = LuaScriptMgr.GetArrayObject<Collider>(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			int arg4 = (int)LuaScriptMgr.GetNumber(L, 5);
+			int o = Physics.OverlapBoxNonAlloc(arg0,arg1,objs2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 6)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Collider[] objs2 = LuaScriptMgr.GetArrayObject<Collider>(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			int arg4 = (int)LuaScriptMgr.GetNumber(L, 5);
+			QueryTriggerInteraction arg5 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 6, typeof(QueryTriggerInteraction));
+			int o = Physics.OverlapBoxNonAlloc(arg0,arg1,objs2,arg3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.OverlapBoxNonAlloc");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int BoxCastAll(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 3)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] o = Physics.BoxCastAll(arg0,arg1,arg2);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			RaycastHit[] o = Physics.BoxCastAll(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			float arg4 = (float)LuaScriptMgr.GetNumber(L, 5);
+			RaycastHit[] o = Physics.BoxCastAll(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 6)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			float arg4 = (float)LuaScriptMgr.GetNumber(L, 5);
+			int arg5 = (int)LuaScriptMgr.GetNumber(L, 6);
+			RaycastHit[] o = Physics.BoxCastAll(arg0,arg1,arg2,arg3,arg4,arg5);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else if (count == 7)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			float arg4 = (float)LuaScriptMgr.GetNumber(L, 5);
+			int arg5 = (int)LuaScriptMgr.GetNumber(L, 6);
+			QueryTriggerInteraction arg6 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 7, typeof(QueryTriggerInteraction));
+			RaycastHit[] o = Physics.BoxCastAll(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
+			LuaScriptMgr.PushArray(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.BoxCastAll");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int BoxCastNonAlloc(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 4)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			int o = Physics.BoxCastNonAlloc(arg0,arg1,arg2,objs3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			int o = Physics.BoxCastNonAlloc(arg0,arg1,arg2,objs3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 6)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
+			int o = Physics.BoxCastNonAlloc(arg0,arg1,arg2,objs3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 7)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
+			int arg6 = (int)LuaScriptMgr.GetNumber(L, 7);
+			int o = Physics.BoxCastNonAlloc(arg0,arg1,arg2,objs3,arg4,arg5,arg6);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 8)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit[] objs3 = LuaScriptMgr.GetArrayObject<RaycastHit>(L, 4);
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
+			int arg6 = (int)LuaScriptMgr.GetNumber(L, 7);
+			QueryTriggerInteraction arg7 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 8, typeof(QueryTriggerInteraction));
+			int o = Physics.BoxCastNonAlloc(arg0,arg1,arg2,objs3,arg4,arg5,arg6,arg7);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.BoxCastNonAlloc");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int BoxCast(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 3)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			bool o = Physics.BoxCast(arg0,arg1,arg2);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), null))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit arg3;
+			bool o = Physics.BoxCast(arg0,arg1,arg2,out arg3);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg3);
+			return 2;
+		}
+		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), typeof(LuaTable)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			bool o = Physics.BoxCast(arg0,arg1,arg2,arg3);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), typeof(float)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			float arg4 = (float)LuaDLL.lua_tonumber(L, 5);
+			bool o = Physics.BoxCast(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), null, typeof(LuaTable)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit arg3;
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			bool o = Physics.BoxCast(arg0,arg1,arg2,out arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg3);
+			return 2;
+		}
+		else if (count == 6 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), null, typeof(LuaTable), typeof(float)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit arg3;
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			float arg5 = (float)LuaDLL.lua_tonumber(L, 6);
+			bool o = Physics.BoxCast(arg0,arg1,arg2,out arg3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg3);
+			return 2;
+		}
+		else if (count == 6 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			float arg4 = (float)LuaDLL.lua_tonumber(L, 5);
+			int arg5 = (int)LuaDLL.lua_tonumber(L, 6);
+			bool o = Physics.BoxCast(arg0,arg1,arg2,arg3,arg4,arg5);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 7 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), typeof(float), typeof(int), typeof(QueryTriggerInteraction)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			Quaternion arg3 = LuaScriptMgr.GetQuaternion(L, 4);
+			float arg4 = (float)LuaDLL.lua_tonumber(L, 5);
+			int arg5 = (int)LuaDLL.lua_tonumber(L, 6);
+			QueryTriggerInteraction arg6 = (QueryTriggerInteraction)LuaScriptMgr.GetLuaObject(L, 7);
+			bool o = Physics.BoxCast(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 7 && LuaScriptMgr.CheckTypes(L, 1, typeof(LuaTable), typeof(LuaTable), typeof(LuaTable), null, typeof(LuaTable), typeof(float), typeof(int)))
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit arg3;
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			float arg5 = (float)LuaDLL.lua_tonumber(L, 6);
+			int arg6 = (int)LuaDLL.lua_tonumber(L, 7);
+			bool o = Physics.BoxCast(arg0,arg1,arg2,out arg3,arg4,arg5,arg6);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg3);
+			return 2;
+		}
+		else if (count == 8)
+		{
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Vector3 arg2 = LuaScriptMgr.GetVector3(L, 3);
+			RaycastHit arg3;
+			Quaternion arg4 = LuaScriptMgr.GetQuaternion(L, 5);
+			float arg5 = (float)LuaScriptMgr.GetNumber(L, 6);
+			int arg6 = (int)LuaScriptMgr.GetNumber(L, 7);
+			QueryTriggerInteraction arg7 = (QueryTriggerInteraction)LuaScriptMgr.GetNetObject(L, 8, typeof(QueryTriggerInteraction));
+			bool o = Physics.BoxCast(arg0,arg1,arg2,out arg3,arg4,arg5,arg6,arg7);
+			LuaScriptMgr.Push(L, o);
+			LuaScriptMgr.Push(L, arg3);
+			return 2;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: Physics.BoxCast");
 		}
 
 		return 0;

@@ -28,11 +28,13 @@ public class MaterialWrap
 			new LuaMethod("SetBuffer", SetBuffer),
 			new LuaMethod("HasProperty", HasProperty),
 			new LuaMethod("GetTag", GetTag),
+			new LuaMethod("SetOverrideTag", SetOverrideTag),
 			new LuaMethod("Lerp", Lerp),
 			new LuaMethod("SetPass", SetPass),
 			new LuaMethod("CopyPropertiesFromMaterial", CopyPropertiesFromMaterial),
 			new LuaMethod("EnableKeyword", EnableKeyword),
 			new LuaMethod("DisableKeyword", DisableKeyword),
+			new LuaMethod("IsKeywordEnabled", IsKeywordEnabled),
 			new LuaMethod("New", _CreateMaterial),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -48,6 +50,7 @@ public class MaterialWrap
 			new LuaField("passCount", get_passCount, null),
 			new LuaField("renderQueue", get_renderQueue, set_renderQueue),
 			new LuaField("shaderKeywords", get_shaderKeywords, set_shaderKeywords),
+			new LuaField("globalIlluminationFlags", get_globalIlluminationFlags, set_globalIlluminationFlags),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.Material", typeof(Material), regs, fields, typeof(Object));
@@ -68,13 +71,6 @@ public class MaterialWrap
 		else if (count == 1 && LuaScriptMgr.CheckTypes(L, 1, typeof(Shader)))
 		{
 			Shader arg0 = (Shader)LuaScriptMgr.GetUnityObject(L, 1, typeof(Shader));
-			Material obj = new Material(arg0);
-			LuaScriptMgr.Push(L, obj);
-			return 1;
-		}
-		else if (count == 1 && LuaScriptMgr.CheckTypes(L, 1, typeof(string)))
-		{
-			string arg0 = LuaScriptMgr.GetString(L, 1);
 			Material obj = new Material(arg0);
 			LuaScriptMgr.Push(L, obj);
 			return 1;
@@ -289,6 +285,30 @@ public class MaterialWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_globalIlluminationFlags(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Material obj = (Material)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name globalIlluminationFlags");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index globalIlluminationFlags on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.globalIlluminationFlags);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_shader(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -453,6 +473,30 @@ public class MaterialWrap
 		}
 
 		obj.shaderKeywords = LuaScriptMgr.GetArrayString(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_globalIlluminationFlags(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Material obj = (Material)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name globalIlluminationFlags");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index globalIlluminationFlags on a nil value");
+			}
+		}
+
+		obj.globalIlluminationFlags = (MaterialGlobalIlluminationFlags)LuaScriptMgr.GetNetObject(L, 3, typeof(MaterialGlobalIlluminationFlags));
 		return 0;
 	}
 
@@ -921,6 +965,17 @@ public class MaterialWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetOverrideTag(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		Material obj = (Material)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Material");
+		string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+		string arg1 = LuaScriptMgr.GetLuaString(L, 3);
+		obj.SetOverrideTag(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int Lerp(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 4);
@@ -971,6 +1026,17 @@ public class MaterialWrap
 		string arg0 = LuaScriptMgr.GetLuaString(L, 2);
 		obj.DisableKeyword(arg0);
 		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int IsKeywordEnabled(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		Material obj = (Material)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Material");
+		string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+		bool o = obj.IsKeywordEnabled(arg0);
+		LuaScriptMgr.Push(L, o);
+		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

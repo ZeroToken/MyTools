@@ -11,7 +11,6 @@ public class ParticleSystemWrap
 		{
 			new LuaMethod("SetParticles", SetParticles),
 			new LuaMethod("GetParticles", GetParticles),
-			new LuaMethod("GetCollisionEvents", GetCollisionEvents),
 			new LuaMethod("Simulate", Simulate),
 			new LuaMethod("Play", Play),
 			new LuaMethod("Stop", Stop),
@@ -36,18 +35,33 @@ public class ParticleSystemWrap
 			new LuaField("duration", get_duration, null),
 			new LuaField("playbackSpeed", get_playbackSpeed, set_playbackSpeed),
 			new LuaField("particleCount", get_particleCount, null),
-			new LuaField("safeCollisionEventSize", get_safeCollisionEventSize, null),
-			new LuaField("enableEmission", get_enableEmission, set_enableEmission),
-			new LuaField("emissionRate", get_emissionRate, set_emissionRate),
 			new LuaField("startSpeed", get_startSpeed, set_startSpeed),
 			new LuaField("startSize", get_startSize, set_startSize),
 			new LuaField("startColor", get_startColor, set_startColor),
 			new LuaField("startRotation", get_startRotation, set_startRotation),
+			new LuaField("startRotation3D", get_startRotation3D, set_startRotation3D),
 			new LuaField("startLifetime", get_startLifetime, set_startLifetime),
 			new LuaField("gravityModifier", get_gravityModifier, set_gravityModifier),
 			new LuaField("maxParticles", get_maxParticles, set_maxParticles),
 			new LuaField("simulationSpace", get_simulationSpace, set_simulationSpace),
+			new LuaField("scalingMode", get_scalingMode, set_scalingMode),
 			new LuaField("randomSeed", get_randomSeed, set_randomSeed),
+			new LuaField("emission", get_emission, null),
+			new LuaField("shape", get_shape, null),
+			new LuaField("velocityOverLifetime", get_velocityOverLifetime, null),
+			new LuaField("limitVelocityOverLifetime", get_limitVelocityOverLifetime, null),
+			new LuaField("inheritVelocity", get_inheritVelocity, null),
+			new LuaField("forceOverLifetime", get_forceOverLifetime, null),
+			new LuaField("colorOverLifetime", get_colorOverLifetime, null),
+			new LuaField("colorBySpeed", get_colorBySpeed, null),
+			new LuaField("sizeOverLifetime", get_sizeOverLifetime, null),
+			new LuaField("sizeBySpeed", get_sizeBySpeed, null),
+			new LuaField("rotationOverLifetime", get_rotationOverLifetime, null),
+			new LuaField("rotationBySpeed", get_rotationBySpeed, null),
+			new LuaField("externalForces", get_externalForces, null),
+			new LuaField("collision", get_collision, null),
+			new LuaField("subEmitters", get_subEmitters, null),
+			new LuaField("textureSheetAnimation", get_textureSheetAnimation, null),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.ParticleSystem", typeof(ParticleSystem), regs, fields, typeof(Component));
@@ -322,78 +336,6 @@ public class ParticleSystemWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_safeCollisionEventSize(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		ParticleSystem obj = (ParticleSystem)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name safeCollisionEventSize");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index safeCollisionEventSize on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.safeCollisionEventSize);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_enableEmission(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		ParticleSystem obj = (ParticleSystem)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name enableEmission");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index enableEmission on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.enableEmission);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_emissionRate(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		ParticleSystem obj = (ParticleSystem)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name emissionRate");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index emissionRate on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.emissionRate);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_startSpeed(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -486,6 +428,30 @@ public class ParticleSystemWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.startRotation);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_startRotation3D(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name startRotation3D");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index startRotation3D on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.startRotation3D);
 		return 1;
 	}
 
@@ -586,6 +552,30 @@ public class ParticleSystemWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_scalingMode(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name scalingMode");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index scalingMode on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.scalingMode);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_randomSeed(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -606,6 +596,390 @@ public class ParticleSystemWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.randomSeed);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_emission(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name emission");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index emission on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.emission);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_shape(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name shape");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index shape on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.shape);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_velocityOverLifetime(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name velocityOverLifetime");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index velocityOverLifetime on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.velocityOverLifetime);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_limitVelocityOverLifetime(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name limitVelocityOverLifetime");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index limitVelocityOverLifetime on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.limitVelocityOverLifetime);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_inheritVelocity(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name inheritVelocity");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index inheritVelocity on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.inheritVelocity);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_forceOverLifetime(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name forceOverLifetime");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index forceOverLifetime on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.forceOverLifetime);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_colorOverLifetime(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name colorOverLifetime");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index colorOverLifetime on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.colorOverLifetime);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_colorBySpeed(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name colorBySpeed");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index colorBySpeed on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.colorBySpeed);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_sizeOverLifetime(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name sizeOverLifetime");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index sizeOverLifetime on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.sizeOverLifetime);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_sizeBySpeed(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name sizeBySpeed");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index sizeBySpeed on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.sizeBySpeed);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_rotationOverLifetime(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name rotationOverLifetime");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index rotationOverLifetime on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.rotationOverLifetime);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_rotationBySpeed(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name rotationBySpeed");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index rotationBySpeed on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.rotationBySpeed);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_externalForces(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name externalForces");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index externalForces on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.externalForces);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_collision(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name collision");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index collision on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.collision);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_subEmitters(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name subEmitters");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index subEmitters on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.subEmitters);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_textureSheetAnimation(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name textureSheetAnimation");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index textureSheetAnimation on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj.textureSheetAnimation);
 		return 1;
 	}
 
@@ -730,54 +1104,6 @@ public class ParticleSystemWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_enableEmission(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		ParticleSystem obj = (ParticleSystem)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name enableEmission");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index enableEmission on a nil value");
-			}
-		}
-
-		obj.enableEmission = LuaScriptMgr.GetBoolean(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_emissionRate(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		ParticleSystem obj = (ParticleSystem)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name emissionRate");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index emissionRate on a nil value");
-			}
-		}
-
-		obj.emissionRate = (float)LuaScriptMgr.GetNumber(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_startSpeed(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -870,6 +1196,30 @@ public class ParticleSystemWrap
 		}
 
 		obj.startRotation = (float)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_startRotation3D(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name startRotation3D");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index startRotation3D on a nil value");
+			}
+		}
+
+		obj.startRotation3D = LuaScriptMgr.GetVector3(L, 3);
 		return 0;
 	}
 
@@ -970,6 +1320,30 @@ public class ParticleSystemWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_scalingMode(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ParticleSystem obj = (ParticleSystem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name scalingMode");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index scalingMode on a nil value");
+			}
+		}
+
+		obj.scalingMode = (ParticleSystemScalingMode)LuaScriptMgr.GetNetObject(L, 3, typeof(ParticleSystemScalingMode));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_randomSeed(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -1011,18 +1385,6 @@ public class ParticleSystemWrap
 		ParticleSystem obj = (ParticleSystem)LuaScriptMgr.GetUnityObjectSelf(L, 1, "ParticleSystem");
 		ParticleSystem.Particle[] objs0 = LuaScriptMgr.GetArrayObject<ParticleSystem.Particle>(L, 2);
 		int o = obj.GetParticles(objs0);
-		LuaScriptMgr.Push(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int GetCollisionEvents(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 3);
-		ParticleSystem obj = (ParticleSystem)LuaScriptMgr.GetUnityObjectSelf(L, 1, "ParticleSystem");
-		GameObject arg0 = (GameObject)LuaScriptMgr.GetUnityObject(L, 2, typeof(GameObject));
-		ParticleSystem.CollisionEvent[] objs1 = LuaScriptMgr.GetArrayObject<ParticleSystem.CollisionEvent>(L, 3);
-		int o = obj.GetCollisionEvents(arg0,objs1);
 		LuaScriptMgr.Push(L, o);
 		return 1;
 	}
@@ -1201,29 +1563,19 @@ public class ParticleSystemWrap
 	{
 		int count = LuaDLL.lua_gettop(L);
 
-		if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(ParticleSystem), typeof(ParticleSystem.Particle)))
+		if (count == 2)
 		{
 			ParticleSystem obj = (ParticleSystem)LuaScriptMgr.GetUnityObjectSelf(L, 1, "ParticleSystem");
-			ParticleSystem.Particle arg0 = (ParticleSystem.Particle)LuaScriptMgr.GetLuaObject(L, 2);
+			int arg0 = (int)LuaScriptMgr.GetNumber(L, 2);
 			obj.Emit(arg0);
 			return 0;
 		}
-		else if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(ParticleSystem), typeof(int)))
+		else if (count == 3)
 		{
 			ParticleSystem obj = (ParticleSystem)LuaScriptMgr.GetUnityObjectSelf(L, 1, "ParticleSystem");
-			int arg0 = (int)LuaDLL.lua_tonumber(L, 2);
-			obj.Emit(arg0);
-			return 0;
-		}
-		else if (count == 6)
-		{
-			ParticleSystem obj = (ParticleSystem)LuaScriptMgr.GetUnityObjectSelf(L, 1, "ParticleSystem");
-			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 2);
-			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 3);
-			float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
-			float arg3 = (float)LuaScriptMgr.GetNumber(L, 5);
-			Color32 arg4 = (Color32)LuaScriptMgr.GetNetObject(L, 6, typeof(Color32));
-			obj.Emit(arg0,arg1,arg2,arg3,arg4);
+			ParticleSystem.EmitParams arg0 = (ParticleSystem.EmitParams)LuaScriptMgr.GetNetObject(L, 2, typeof(ParticleSystem.EmitParams));
+			int arg1 = (int)LuaScriptMgr.GetNumber(L, 3);
+			obj.Emit(arg0,arg1);
 			return 0;
 		}
 		else

@@ -9,6 +9,8 @@ public class AudioClipWrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
+			new LuaMethod("LoadAudioData", LoadAudioData),
+			new LuaMethod("UnloadAudioData", UnloadAudioData),
 			new LuaMethod("GetData", GetData),
 			new LuaMethod("SetData", SetData),
 			new LuaMethod("Create", Create),
@@ -23,7 +25,10 @@ public class AudioClipWrap
 			new LuaField("samples", get_samples, null),
 			new LuaField("channels", get_channels, null),
 			new LuaField("frequency", get_frequency, null),
-			new LuaField("isReadyToPlay", get_isReadyToPlay, null),
+			new LuaField("loadType", get_loadType, null),
+			new LuaField("preloadAudioData", get_preloadAudioData, null),
+			new LuaField("loadState", get_loadState, null),
+			new LuaField("loadInBackground", get_loadInBackground, null),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.AudioClip", typeof(AudioClip), regs, fields, typeof(Object));
@@ -154,7 +159,7 @@ public class AudioClipWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_isReadyToPlay(IntPtr L)
+	static int get_loadType(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		AudioClip obj = (AudioClip)o;
@@ -165,15 +170,107 @@ public class AudioClipWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name isReadyToPlay");
+				LuaDLL.luaL_error(L, "unknown member name loadType");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index isReadyToPlay on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index loadType on a nil value");
 			}
 		}
 
-		LuaScriptMgr.Push(L, obj.isReadyToPlay);
+		LuaScriptMgr.Push(L, obj.loadType);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_preloadAudioData(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AudioClip obj = (AudioClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name preloadAudioData");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index preloadAudioData on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.preloadAudioData);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_loadState(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AudioClip obj = (AudioClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name loadState");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index loadState on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.loadState);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_loadInBackground(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		AudioClip obj = (AudioClip)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name loadInBackground");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index loadInBackground on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.loadInBackground);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadAudioData(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		AudioClip obj = (AudioClip)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AudioClip");
+		bool o = obj.LoadAudioData();
+		LuaScriptMgr.Push(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int UnloadAudioData(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		AudioClip obj = (AudioClip)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AudioClip");
+		bool o = obj.UnloadAudioData();
+		LuaScriptMgr.Push(L, o);
 		return 1;
 	}
 
@@ -184,8 +281,9 @@ public class AudioClipWrap
 		AudioClip obj = (AudioClip)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AudioClip");
 		float[] objs0 = LuaScriptMgr.GetArrayNumber<float>(L, 2);
 		int arg1 = (int)LuaScriptMgr.GetNumber(L, 3);
-		obj.GetData(objs0,arg1);
-		return 0;
+		bool o = obj.GetData(objs0,arg1);
+		LuaScriptMgr.Push(L, o);
+		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -195,8 +293,9 @@ public class AudioClipWrap
 		AudioClip obj = (AudioClip)LuaScriptMgr.GetUnityObjectSelf(L, 1, "AudioClip");
 		float[] objs0 = LuaScriptMgr.GetArrayNumber<float>(L, 2);
 		int arg1 = (int)LuaScriptMgr.GetNumber(L, 3);
-		obj.SetData(objs0,arg1);
-		return 0;
+		bool o = obj.SetData(objs0,arg1);
+		LuaScriptMgr.Push(L, o);
+		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -204,14 +303,43 @@ public class AudioClipWrap
 	{
 		int count = LuaDLL.lua_gettop(L);
 
-		if (count == 6)
+		if (count == 5)
 		{
 			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
 			int arg1 = (int)LuaScriptMgr.GetNumber(L, 2);
 			int arg2 = (int)LuaScriptMgr.GetNumber(L, 3);
 			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
 			bool arg4 = LuaScriptMgr.GetBoolean(L, 5);
-			bool arg5 = LuaScriptMgr.GetBoolean(L, 6);
+			AudioClip o = AudioClip.Create(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 6)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			int arg1 = (int)LuaScriptMgr.GetNumber(L, 2);
+			int arg2 = (int)LuaScriptMgr.GetNumber(L, 3);
+			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
+			bool arg4 = LuaScriptMgr.GetBoolean(L, 5);
+			AudioClip.PCMReaderCallback arg5 = null;
+			LuaTypes funcType6 = LuaDLL.lua_type(L, 6);
+
+			if (funcType6 != LuaTypes.LUA_TFUNCTION)
+			{
+				 arg5 = (AudioClip.PCMReaderCallback)LuaScriptMgr.GetNetObject(L, 6, typeof(AudioClip.PCMReaderCallback));
+			}
+			else
+			{
+				LuaFunction func = LuaScriptMgr.GetLuaFunction(L, 6);
+				arg5 = (param0) =>
+				{
+					int top = func.BeginPCall();
+					LuaScriptMgr.PushArray(L, param0);
+					func.PCall(top, 1);
+					func.EndPCall(top);
+				};
+			}
+
 			AudioClip o = AudioClip.Create(arg0,arg1,arg2,arg3,arg4,arg5);
 			LuaScriptMgr.Push(L, o);
 			return 1;
@@ -223,18 +351,17 @@ public class AudioClipWrap
 			int arg2 = (int)LuaScriptMgr.GetNumber(L, 3);
 			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
 			bool arg4 = LuaScriptMgr.GetBoolean(L, 5);
-			bool arg5 = LuaScriptMgr.GetBoolean(L, 6);
-			AudioClip.PCMReaderCallback arg6 = null;
-			LuaTypes funcType7 = LuaDLL.lua_type(L, 7);
+			AudioClip.PCMReaderCallback arg5 = null;
+			LuaTypes funcType6 = LuaDLL.lua_type(L, 6);
 
-			if (funcType7 != LuaTypes.LUA_TFUNCTION)
+			if (funcType6 != LuaTypes.LUA_TFUNCTION)
 			{
-				 arg6 = (AudioClip.PCMReaderCallback)LuaScriptMgr.GetNetObject(L, 7, typeof(AudioClip.PCMReaderCallback));
+				 arg5 = (AudioClip.PCMReaderCallback)LuaScriptMgr.GetNetObject(L, 6, typeof(AudioClip.PCMReaderCallback));
 			}
 			else
 			{
-				LuaFunction func = LuaScriptMgr.GetLuaFunction(L, 7);
-				arg6 = (param0) =>
+				LuaFunction func = LuaScriptMgr.GetLuaFunction(L, 6);
+				arg5 = (param0) =>
 				{
 					int top = func.BeginPCall();
 					LuaScriptMgr.PushArray(L, param0);
@@ -243,48 +370,17 @@ public class AudioClipWrap
 				};
 			}
 
-			AudioClip o = AudioClip.Create(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
-			LuaScriptMgr.Push(L, o);
-			return 1;
-		}
-		else if (count == 8)
-		{
-			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
-			int arg1 = (int)LuaScriptMgr.GetNumber(L, 2);
-			int arg2 = (int)LuaScriptMgr.GetNumber(L, 3);
-			int arg3 = (int)LuaScriptMgr.GetNumber(L, 4);
-			bool arg4 = LuaScriptMgr.GetBoolean(L, 5);
-			bool arg5 = LuaScriptMgr.GetBoolean(L, 6);
-			AudioClip.PCMReaderCallback arg6 = null;
+			AudioClip.PCMSetPositionCallback arg6 = null;
 			LuaTypes funcType7 = LuaDLL.lua_type(L, 7);
 
 			if (funcType7 != LuaTypes.LUA_TFUNCTION)
 			{
-				 arg6 = (AudioClip.PCMReaderCallback)LuaScriptMgr.GetNetObject(L, 7, typeof(AudioClip.PCMReaderCallback));
+				 arg6 = (AudioClip.PCMSetPositionCallback)LuaScriptMgr.GetNetObject(L, 7, typeof(AudioClip.PCMSetPositionCallback));
 			}
 			else
 			{
 				LuaFunction func = LuaScriptMgr.GetLuaFunction(L, 7);
 				arg6 = (param0) =>
-				{
-					int top = func.BeginPCall();
-					LuaScriptMgr.PushArray(L, param0);
-					func.PCall(top, 1);
-					func.EndPCall(top);
-				};
-			}
-
-			AudioClip.PCMSetPositionCallback arg7 = null;
-			LuaTypes funcType8 = LuaDLL.lua_type(L, 8);
-
-			if (funcType8 != LuaTypes.LUA_TFUNCTION)
-			{
-				 arg7 = (AudioClip.PCMSetPositionCallback)LuaScriptMgr.GetNetObject(L, 8, typeof(AudioClip.PCMSetPositionCallback));
-			}
-			else
-			{
-				LuaFunction func = LuaScriptMgr.GetLuaFunction(L, 8);
-				arg7 = (param0) =>
 				{
 					int top = func.BeginPCall();
 					LuaScriptMgr.Push(L, param0);
@@ -293,7 +389,7 @@ public class AudioClipWrap
 				};
 			}
 
-			AudioClip o = AudioClip.Create(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+			AudioClip o = AudioClip.Create(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}

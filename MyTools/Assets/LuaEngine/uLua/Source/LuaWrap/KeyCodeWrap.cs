@@ -247,6 +247,86 @@ public class KeyCodeWrap
 		new LuaMethod("Joystick4Button17", GetJoystick4Button17),
 		new LuaMethod("Joystick4Button18", GetJoystick4Button18),
 		new LuaMethod("Joystick4Button19", GetJoystick4Button19),
+		new LuaMethod("Joystick5Button0", GetJoystick5Button0),
+		new LuaMethod("Joystick5Button1", GetJoystick5Button1),
+		new LuaMethod("Joystick5Button2", GetJoystick5Button2),
+		new LuaMethod("Joystick5Button3", GetJoystick5Button3),
+		new LuaMethod("Joystick5Button4", GetJoystick5Button4),
+		new LuaMethod("Joystick5Button5", GetJoystick5Button5),
+		new LuaMethod("Joystick5Button6", GetJoystick5Button6),
+		new LuaMethod("Joystick5Button7", GetJoystick5Button7),
+		new LuaMethod("Joystick5Button8", GetJoystick5Button8),
+		new LuaMethod("Joystick5Button9", GetJoystick5Button9),
+		new LuaMethod("Joystick5Button10", GetJoystick5Button10),
+		new LuaMethod("Joystick5Button11", GetJoystick5Button11),
+		new LuaMethod("Joystick5Button12", GetJoystick5Button12),
+		new LuaMethod("Joystick5Button13", GetJoystick5Button13),
+		new LuaMethod("Joystick5Button14", GetJoystick5Button14),
+		new LuaMethod("Joystick5Button15", GetJoystick5Button15),
+		new LuaMethod("Joystick5Button16", GetJoystick5Button16),
+		new LuaMethod("Joystick5Button17", GetJoystick5Button17),
+		new LuaMethod("Joystick5Button18", GetJoystick5Button18),
+		new LuaMethod("Joystick5Button19", GetJoystick5Button19),
+		new LuaMethod("Joystick6Button0", GetJoystick6Button0),
+		new LuaMethod("Joystick6Button1", GetJoystick6Button1),
+		new LuaMethod("Joystick6Button2", GetJoystick6Button2),
+		new LuaMethod("Joystick6Button3", GetJoystick6Button3),
+		new LuaMethod("Joystick6Button4", GetJoystick6Button4),
+		new LuaMethod("Joystick6Button5", GetJoystick6Button5),
+		new LuaMethod("Joystick6Button6", GetJoystick6Button6),
+		new LuaMethod("Joystick6Button7", GetJoystick6Button7),
+		new LuaMethod("Joystick6Button8", GetJoystick6Button8),
+		new LuaMethod("Joystick6Button9", GetJoystick6Button9),
+		new LuaMethod("Joystick6Button10", GetJoystick6Button10),
+		new LuaMethod("Joystick6Button11", GetJoystick6Button11),
+		new LuaMethod("Joystick6Button12", GetJoystick6Button12),
+		new LuaMethod("Joystick6Button13", GetJoystick6Button13),
+		new LuaMethod("Joystick6Button14", GetJoystick6Button14),
+		new LuaMethod("Joystick6Button15", GetJoystick6Button15),
+		new LuaMethod("Joystick6Button16", GetJoystick6Button16),
+		new LuaMethod("Joystick6Button17", GetJoystick6Button17),
+		new LuaMethod("Joystick6Button18", GetJoystick6Button18),
+		new LuaMethod("Joystick6Button19", GetJoystick6Button19),
+		new LuaMethod("Joystick7Button0", GetJoystick7Button0),
+		new LuaMethod("Joystick7Button1", GetJoystick7Button1),
+		new LuaMethod("Joystick7Button2", GetJoystick7Button2),
+		new LuaMethod("Joystick7Button3", GetJoystick7Button3),
+		new LuaMethod("Joystick7Button4", GetJoystick7Button4),
+		new LuaMethod("Joystick7Button5", GetJoystick7Button5),
+		new LuaMethod("Joystick7Button6", GetJoystick7Button6),
+		new LuaMethod("Joystick7Button7", GetJoystick7Button7),
+		new LuaMethod("Joystick7Button8", GetJoystick7Button8),
+		new LuaMethod("Joystick7Button9", GetJoystick7Button9),
+		new LuaMethod("Joystick7Button10", GetJoystick7Button10),
+		new LuaMethod("Joystick7Button11", GetJoystick7Button11),
+		new LuaMethod("Joystick7Button12", GetJoystick7Button12),
+		new LuaMethod("Joystick7Button13", GetJoystick7Button13),
+		new LuaMethod("Joystick7Button14", GetJoystick7Button14),
+		new LuaMethod("Joystick7Button15", GetJoystick7Button15),
+		new LuaMethod("Joystick7Button16", GetJoystick7Button16),
+		new LuaMethod("Joystick7Button17", GetJoystick7Button17),
+		new LuaMethod("Joystick7Button18", GetJoystick7Button18),
+		new LuaMethod("Joystick7Button19", GetJoystick7Button19),
+		new LuaMethod("Joystick8Button0", GetJoystick8Button0),
+		new LuaMethod("Joystick8Button1", GetJoystick8Button1),
+		new LuaMethod("Joystick8Button2", GetJoystick8Button2),
+		new LuaMethod("Joystick8Button3", GetJoystick8Button3),
+		new LuaMethod("Joystick8Button4", GetJoystick8Button4),
+		new LuaMethod("Joystick8Button5", GetJoystick8Button5),
+		new LuaMethod("Joystick8Button6", GetJoystick8Button6),
+		new LuaMethod("Joystick8Button7", GetJoystick8Button7),
+		new LuaMethod("Joystick8Button8", GetJoystick8Button8),
+		new LuaMethod("Joystick8Button9", GetJoystick8Button9),
+		new LuaMethod("Joystick8Button10", GetJoystick8Button10),
+		new LuaMethod("Joystick8Button11", GetJoystick8Button11),
+		new LuaMethod("Joystick8Button12", GetJoystick8Button12),
+		new LuaMethod("Joystick8Button13", GetJoystick8Button13),
+		new LuaMethod("Joystick8Button14", GetJoystick8Button14),
+		new LuaMethod("Joystick8Button15", GetJoystick8Button15),
+		new LuaMethod("Joystick8Button16", GetJoystick8Button16),
+		new LuaMethod("Joystick8Button17", GetJoystick8Button17),
+		new LuaMethod("Joystick8Button18", GetJoystick8Button18),
+		new LuaMethod("Joystick8Button19", GetJoystick8Button19),
 		new LuaMethod("IntToEnum", IntToEnum),
 	};
 
@@ -1939,6 +2019,566 @@ public class KeyCodeWrap
 	static int GetJoystick4Button19(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, KeyCode.Joystick4Button19);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button0(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button0);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button1(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button1);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button2(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button2);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button3(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button3);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button4(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button4);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button5(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button5);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button6(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button6);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button7(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button7);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button8(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button8);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button9(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button9);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button10(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button10);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button11(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button11);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button12(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button12);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button13(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button13);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button14(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button14);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button15(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button15);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button16(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button16);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button17(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button17);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button18(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button18);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick5Button19(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick5Button19);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button0(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button0);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button1(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button1);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button2(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button2);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button3(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button3);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button4(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button4);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button5(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button5);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button6(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button6);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button7(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button7);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button8(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button8);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button9(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button9);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button10(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button10);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button11(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button11);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button12(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button12);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button13(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button13);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button14(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button14);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button15(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button15);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button16(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button16);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button17(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button17);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button18(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button18);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick6Button19(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick6Button19);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button0(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button0);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button1(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button1);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button2(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button2);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button3(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button3);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button4(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button4);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button5(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button5);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button6(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button6);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button7(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button7);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button8(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button8);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button9(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button9);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button10(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button10);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button11(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button11);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button12(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button12);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button13(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button13);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button14(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button14);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button15(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button15);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button16(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button16);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button17(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button17);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button18(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button18);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick7Button19(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick7Button19);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button0(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button0);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button1(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button1);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button2(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button2);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button3(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button3);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button4(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button4);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button5(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button5);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button6(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button6);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button7(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button7);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button8(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button8);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button9(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button9);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button10(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button10);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button11(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button11);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button12(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button12);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button13(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button13);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button14(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button14);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button15(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button15);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button16(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button16);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button17(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button17);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button18(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button18);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetJoystick8Button19(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, KeyCode.Joystick8Button19);
 		return 1;
 	}
 

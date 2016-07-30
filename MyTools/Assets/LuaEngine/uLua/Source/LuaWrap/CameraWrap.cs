@@ -13,6 +13,11 @@ public class CameraWrap
 			new LuaMethod("ResetWorldToCameraMatrix", ResetWorldToCameraMatrix),
 			new LuaMethod("ResetProjectionMatrix", ResetProjectionMatrix),
 			new LuaMethod("ResetAspect", ResetAspect),
+			new LuaMethod("ResetFieldOfView", ResetFieldOfView),
+			new LuaMethod("SetStereoViewMatrices", SetStereoViewMatrices),
+			new LuaMethod("ResetStereoViewMatrices", ResetStereoViewMatrices),
+			new LuaMethod("SetStereoProjectionMatrices", SetStereoProjectionMatrices),
+			new LuaMethod("ResetStereoProjectionMatrices", ResetStereoProjectionMatrices),
 			new LuaMethod("WorldToScreenPoint", WorldToScreenPoint),
 			new LuaMethod("WorldToViewportPoint", WorldToViewportPoint),
 			new LuaMethod("ViewportToWorldPoint", ViewportToWorldPoint),
@@ -30,6 +35,11 @@ public class CameraWrap
 			new LuaMethod("SetupCurrent", SetupCurrent),
 			new LuaMethod("RenderToCubemap", RenderToCubemap),
 			new LuaMethod("CopyFrom", CopyFrom),
+			new LuaMethod("AddCommandBuffer", AddCommandBuffer),
+			new LuaMethod("RemoveCommandBuffer", RemoveCommandBuffer),
+			new LuaMethod("RemoveCommandBuffers", RemoveCommandBuffers),
+			new LuaMethod("RemoveAllCommandBuffers", RemoveAllCommandBuffers),
+			new LuaMethod("GetCommandBuffers", GetCommandBuffers),
 			new LuaMethod("CalculateObliqueMatrix", CalculateObliqueMatrix),
 			new LuaMethod("New", _CreateCamera),
 			new LuaMethod("GetClassType", GetClassType),
@@ -38,6 +48,9 @@ public class CameraWrap
 
 		LuaField[] fields = new LuaField[]
 		{
+			new LuaField("onPreCull", get_onPreCull, set_onPreCull),
+			new LuaField("onPreRender", get_onPreRender, set_onPreRender),
+			new LuaField("onPostRender", get_onPostRender, set_onPostRender),
 			new LuaField("fieldOfView", get_fieldOfView, set_fieldOfView),
 			new LuaField("nearClipPlane", get_nearClipPlane, set_nearClipPlane),
 			new LuaField("farClipPlane", get_farClipPlane, set_farClipPlane),
@@ -46,8 +59,8 @@ public class CameraWrap
 			new LuaField("hdr", get_hdr, set_hdr),
 			new LuaField("orthographicSize", get_orthographicSize, set_orthographicSize),
 			new LuaField("orthographic", get_orthographic, set_orthographic),
+			new LuaField("opaqueSortMode", get_opaqueSortMode, set_opaqueSortMode),
 			new LuaField("transparencySortMode", get_transparencySortMode, set_transparencySortMode),
-			new LuaField("isOrthoGraphic", get_isOrthoGraphic, set_isOrthoGraphic),
 			new LuaField("depth", get_depth, set_depth),
 			new LuaField("aspect", get_aspect, set_aspect),
 			new LuaField("cullingMask", get_cullingMask, set_cullingMask),
@@ -66,6 +79,9 @@ public class CameraWrap
 			new LuaField("stereoEnabled", get_stereoEnabled, null),
 			new LuaField("stereoSeparation", get_stereoSeparation, set_stereoSeparation),
 			new LuaField("stereoConvergence", get_stereoConvergence, set_stereoConvergence),
+			new LuaField("cameraType", get_cameraType, set_cameraType),
+			new LuaField("stereoMirrorMode", get_stereoMirrorMode, set_stereoMirrorMode),
+			new LuaField("targetDisplay", get_targetDisplay, set_targetDisplay),
 			new LuaField("main", get_main, null),
 			new LuaField("current", get_current, null),
 			new LuaField("allCameras", get_allCameras, null),
@@ -75,6 +91,7 @@ public class CameraWrap
 			new LuaField("layerCullSpherical", get_layerCullSpherical, set_layerCullSpherical),
 			new LuaField("depthTextureMode", get_depthTextureMode, set_depthTextureMode),
 			new LuaField("clearStencilAfterLightingPass", get_clearStencilAfterLightingPass, set_clearStencilAfterLightingPass),
+			new LuaField("commandBufferCount", get_commandBufferCount, null),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.Camera", typeof(Camera), regs, fields, typeof(Behaviour));
@@ -105,6 +122,27 @@ public class CameraWrap
 	static int GetClassType(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, classType);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_onPreCull(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Camera.onPreCull);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_onPreRender(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Camera.onPreRender);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_onPostRender(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, Camera.onPostRender);
 		return 1;
 	}
 
@@ -301,6 +339,30 @@ public class CameraWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_opaqueSortMode(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name opaqueSortMode");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index opaqueSortMode on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.opaqueSortMode);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_transparencySortMode(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -321,30 +383,6 @@ public class CameraWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.transparencySortMode);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_isOrthoGraphic(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Camera obj = (Camera)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name isOrthoGraphic");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index isOrthoGraphic on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.isOrthoGraphic);
 		return 1;
 	}
 
@@ -781,6 +819,78 @@ public class CameraWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_cameraType(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name cameraType");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index cameraType on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.cameraType);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_stereoMirrorMode(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name stereoMirrorMode");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index stereoMirrorMode on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.stereoMirrorMode);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_targetDisplay(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name targetDisplay");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index targetDisplay on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.targetDisplay);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_main(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, Camera.main);
@@ -926,6 +1036,99 @@ public class CameraWrap
 
 		LuaScriptMgr.Push(L, obj.clearStencilAfterLightingPass);
 		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_commandBufferCount(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name commandBufferCount");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index commandBufferCount on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.commandBufferCount);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_onPreCull(IntPtr L)
+	{
+		LuaTypes funcType = LuaDLL.lua_type(L, 3);
+
+		if (funcType != LuaTypes.LUA_TFUNCTION)
+		{
+			Camera.onPreCull = (Camera.CameraCallback)LuaScriptMgr.GetNetObject(L, 3, typeof(Camera.CameraCallback));
+		}
+		else
+		{
+			LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);
+			Camera.onPreCull = (param0) =>
+			{
+				int top = func.BeginPCall();
+				LuaScriptMgr.Push(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+		}
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_onPreRender(IntPtr L)
+	{
+		LuaTypes funcType = LuaDLL.lua_type(L, 3);
+
+		if (funcType != LuaTypes.LUA_TFUNCTION)
+		{
+			Camera.onPreRender = (Camera.CameraCallback)LuaScriptMgr.GetNetObject(L, 3, typeof(Camera.CameraCallback));
+		}
+		else
+		{
+			LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);
+			Camera.onPreRender = (param0) =>
+			{
+				int top = func.BeginPCall();
+				LuaScriptMgr.Push(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+		}
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_onPostRender(IntPtr L)
+	{
+		LuaTypes funcType = LuaDLL.lua_type(L, 3);
+
+		if (funcType != LuaTypes.LUA_TFUNCTION)
+		{
+			Camera.onPostRender = (Camera.CameraCallback)LuaScriptMgr.GetNetObject(L, 3, typeof(Camera.CameraCallback));
+		}
+		else
+		{
+			LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);
+			Camera.onPostRender = (param0) =>
+			{
+				int top = func.BeginPCall();
+				LuaScriptMgr.Push(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+		}
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -1097,6 +1300,30 @@ public class CameraWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_opaqueSortMode(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name opaqueSortMode");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index opaqueSortMode on a nil value");
+			}
+		}
+
+		obj.opaqueSortMode = (UnityEngine.Rendering.OpaqueSortMode)LuaScriptMgr.GetNetObject(L, 3, typeof(UnityEngine.Rendering.OpaqueSortMode));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_transparencySortMode(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -1117,30 +1344,6 @@ public class CameraWrap
 		}
 
 		obj.transparencySortMode = (TransparencySortMode)LuaScriptMgr.GetNetObject(L, 3, typeof(TransparencySortMode));
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_isOrthoGraphic(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Camera obj = (Camera)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name isOrthoGraphic");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index isOrthoGraphic on a nil value");
-			}
-		}
-
-		obj.isOrthoGraphic = LuaScriptMgr.GetBoolean(L, 3);
 		return 0;
 	}
 
@@ -1457,6 +1660,78 @@ public class CameraWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_cameraType(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name cameraType");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index cameraType on a nil value");
+			}
+		}
+
+		obj.cameraType = (CameraType)LuaScriptMgr.GetNetObject(L, 3, typeof(CameraType));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_stereoMirrorMode(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name stereoMirrorMode");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index stereoMirrorMode on a nil value");
+			}
+		}
+
+		obj.stereoMirrorMode = LuaScriptMgr.GetBoolean(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_targetDisplay(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Camera obj = (Camera)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name targetDisplay");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index targetDisplay on a nil value");
+			}
+		}
+
+		obj.targetDisplay = (int)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_useOcclusionCulling(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -1629,6 +1904,55 @@ public class CameraWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
 		obj.ResetAspect();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ResetFieldOfView(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		obj.ResetFieldOfView();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetStereoViewMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		Matrix4x4 arg0 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 2, typeof(Matrix4x4));
+		Matrix4x4 arg1 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 3, typeof(Matrix4x4));
+		obj.SetStereoViewMatrices(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ResetStereoViewMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		obj.ResetStereoViewMatrices();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetStereoProjectionMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		Matrix4x4 arg0 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 2, typeof(Matrix4x4));
+		Matrix4x4 arg1 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 3, typeof(Matrix4x4));
+		obj.SetStereoProjectionMatrices(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ResetStereoProjectionMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		obj.ResetStereoProjectionMatrices();
 		return 0;
 	}
 
@@ -1843,6 +2167,58 @@ public class CameraWrap
 		Camera arg0 = (Camera)LuaScriptMgr.GetUnityObject(L, 2, typeof(Camera));
 		obj.CopyFrom(arg0);
 		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int AddCommandBuffer(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		UnityEngine.Rendering.CameraEvent arg0 = (UnityEngine.Rendering.CameraEvent)LuaScriptMgr.GetNetObject(L, 2, typeof(UnityEngine.Rendering.CameraEvent));
+		UnityEngine.Rendering.CommandBuffer arg1 = (UnityEngine.Rendering.CommandBuffer)LuaScriptMgr.GetNetObject(L, 3, typeof(UnityEngine.Rendering.CommandBuffer));
+		obj.AddCommandBuffer(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int RemoveCommandBuffer(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		UnityEngine.Rendering.CameraEvent arg0 = (UnityEngine.Rendering.CameraEvent)LuaScriptMgr.GetNetObject(L, 2, typeof(UnityEngine.Rendering.CameraEvent));
+		UnityEngine.Rendering.CommandBuffer arg1 = (UnityEngine.Rendering.CommandBuffer)LuaScriptMgr.GetNetObject(L, 3, typeof(UnityEngine.Rendering.CommandBuffer));
+		obj.RemoveCommandBuffer(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int RemoveCommandBuffers(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		UnityEngine.Rendering.CameraEvent arg0 = (UnityEngine.Rendering.CameraEvent)LuaScriptMgr.GetNetObject(L, 2, typeof(UnityEngine.Rendering.CameraEvent));
+		obj.RemoveCommandBuffers(arg0);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int RemoveAllCommandBuffers(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		obj.RemoveAllCommandBuffers();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetCommandBuffers(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		UnityEngine.Rendering.CameraEvent arg0 = (UnityEngine.Rendering.CameraEvent)LuaScriptMgr.GetNetObject(L, 2, typeof(UnityEngine.Rendering.CameraEvent));
+		UnityEngine.Rendering.CommandBuffer[] o = obj.GetCommandBuffers(arg0);
+		LuaScriptMgr.PushArray(L, o);
+		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
