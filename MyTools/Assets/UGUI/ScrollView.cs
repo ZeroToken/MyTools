@@ -42,6 +42,9 @@ public class ScrollView : MonoBehaviour
     [SerializeField] [Range(0, 999)] 
     private int cellCount = 0;
 
+    [SerializeField] [Range(0, 60)]
+    private float moveDuration = 1;
+
     public ScrollRect scrollRect
     {
         get
@@ -270,15 +273,21 @@ public class ScrollView : MonoBehaviour
 
     public void MoveTo(int index)
     {
+        index = Mathf.Min(index, cellCount);
+        float _value = (float)index / cellCount;
+        Vector3 target = Vector3.zero;
+        switch(arrangement)
+        {
+            case Arrangement.Horizontal:
+                target = new Vector3(_value, 0, 0);
+                break;
+            case Arrangement.Vertical:
+                target = new Vector3(0, _value, 0);
+                break;
+        }
         if(moveParam == null)
-        {
-            moveParam = new MoveParam(scrollRect);
-            moveParam.Start(Vector3.zero, 1);
-        }
-        else
-        {
-            moveParam.Start(Vector3.zero, 1);
-        }
+            moveParam = new MoveParam(scrollRect);  
+        moveParam.Start(target, moveDuration);
     }
 
     private void FixedUpdate()
@@ -288,35 +297,22 @@ public class ScrollView : MonoBehaviour
 
     private class MoveParam
     {
-        public ScrollRect target;
-
-        public Vector3 endPosition;
-
-        public float speed;
-
-        public bool isUpdate;
-
-        private float startTime;
-
-        private float distance;
-
-        private float frac = 0;
-
+        private ScrollRect target;
+        private Vector3 endPosition;
+        private float duration;
+        private bool isUpdate;
+        private float startTime;       
+        private float time = 0;
         public MoveParam() { }
-
-        public MoveParam(ScrollRect _target) 
-        {
-            this.target = _target;
-        }
-
+        public MoveParam(ScrollRect _target) { this.target = _target; }
         public void Update()
         {
             if(isUpdate)
             {
-                if(frac < 1.0f)
+                if(time <= duration)
                 {
-                    frac = (Time.time - startTime) * speed / distance;
-                    target.normalizedPosition = Vector3.Lerp(target.normalizedPosition, endPosition, frac);
+                    time += Time.deltaTime;
+                    target.normalizedPosition = Vector3.Lerp(target.normalizedPosition, endPosition, time / duration);
                 }
                 else
                 {
@@ -324,15 +320,14 @@ public class ScrollView : MonoBehaviour
                 }
             }
         }
-
-        public void Start(Vector3 _end, float _speed)
+        public void Start(Vector3 _end, float _duration)
         {
+            Debug.Log("_end: " + _end);
             this.endPosition = _end;
-            this.speed = _speed;
+            this.duration = _duration;
             this.startTime = Time.time;
-            this.distance = Vector3.Distance(target.normalizedPosition, _end);
             this.isUpdate = true;
-            this.frac = 0;
+            this.time = 0;
         }
     }
 }

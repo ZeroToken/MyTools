@@ -6,6 +6,8 @@ public class ScrollViewTest : MonoBehaviour {
 
     public ScrollView scrollView;
 
+    public int index = 0;
+
     public void Awake()
     {
         scrollView.onScrollCellRefresh = (cell) =>
@@ -16,7 +18,6 @@ public class ScrollViewTest : MonoBehaviour {
 
     public void OnClick()
     {
-        Debug.Log("aaaaaaaaaaaaaaa");
-        scrollView.MoveTo(0);
+        scrollView.MoveTo(index);
     }
 }
